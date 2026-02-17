@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>Pavilion Square KL — 360° Panorama</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+    <!-- Base tag ensures ALL relative resource paths (tiles, media, etc.) resolve through the proxy -->
+    <base href="/isp-proxy/" />
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: #0e0f1a;
+            overflow: hidden;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+
+    <!-- IMPORTANT: Intercept wheel events BEFORE the player sees them to allow page scrolling -->
+    <script>
+        // Check for ?nowheel=1 param
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('nowheel') === '1') {
+            // Add a capture-phase listener to stop the wheel event from reaching the player
+            // This allows the default browser scroll behavior to happen (scrolling the parent page)
+            window.addEventListener('wheel', function (e) {
+                e.stopImmediatePropagation();
+            }, { capture: true, passive: false });
+
+            // Also handle touchmove for 2-finger scroll if needed (though browser handles this well mostly)
+            // But usually wheel is the main one to block for trackpads
+        }
+    </script>
+
+    <!-- Load player JS directly from external server (cross-origin scripts are allowed) -->
+    <script type="text/javascript" src="https://pavilionsquarekl.com/ISP/pano2vr_player.js?ts=9587342"></script>
+
+    <script type="text/javascript">
+        // Create player — NO skin
+        var pano = new pano2vrPlayer("container");
+
+        // Set base path to external server so tiles/media load DIRECTLY (fast, no proxy needed)
+        // Only the XML config needs the proxy (for CORS on XHR)
+        pano.setBasePath("https://pavilionsquarekl.com/ISP/");
+        pano.setQueryParameter("ts=9587342");
+
+        // Load config via Next.js proxy (only this one XHR needs same-origin)
+        window.addEventListener("load", function () {
+            pano.readConfigUrlAsync("/isp-proxy/pano.xml?ts=9587342");
+        });
+
+        // Once panorama is ready, notify parent and start smooth zoom-in
+        var hasNotified = false;
+        function onPanoReady() {
+            if (hasNotified) return;
+            hasNotified = true;
+
+            // Notify parent frame
+            try {
+                window.parent.postMessage({ type: "pano-loaded" }, "*");
+            } catch (e) { }
+
+            // Combined zoom-in + tilt sweep animation
+            var startFov = pano.getFov();
+            var startTilt = pano.getTilt();
+            var targetFov = 150;
+            var targetTilt = 1       // slightly above horizon
+            var duration = 4000;      // 4 seconds for cinematic feel
+            var startTime = null;
+
+            function animateIntro(ts) {
+                if (!startTime) startTime = ts;
+                var elapsed = ts - startTime;
+                var progress = Math.min(elapsed / duration, 1);
+                // Ease-out cubic for smooth deceleration
+                var eased = 1 - Math.pow(1 - progress, 3);
+
+                // Zoom in
+                var currentFov = startFov + (targetFov - startFov) * eased;
+                pano.setFov(currentFov);
+
+                // Tilt sweep: from looking down toward the horizon
+                var currentTilt = startTilt + (targetTilt - startTilt) * eased;
+                pano.setTilt(currentTilt);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateIntro);
+                }
+            }
+
+            requestAnimationFrame(animateIntro);
+        }
+
+        // Listen for view change (fires when panorama first renders)
+        var checkReady = setInterval(function () {
+            try {
+                var fov = pano.getFov();
+                if (fov && fov > 0) {
+                    clearInterval(checkReady);
+                    setTimeout(onPanoReady, 500);
+                }
+            } catch (e) { }
+        }, 200);
+    </script>
+    <noscript>
+        <p><b>Please enable Javascript!</b></p>
+    </noscript>
+</body>
+
+</html>
