@@ -1,228 +1,249 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "@/hooks/useAnimations";
-import { Eye, ExternalLink, RotateCcw, Compass, Building2, MapPin, Maximize2 } from "lucide-react";
-import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import { useInView as useInViewRIO } from "react-intersection-observer";
+import { Compass, Expand, Minimize, Eye, RotateCcw, ChevronLeft, ChevronRight, MapPin, Navigation, View } from "lucide-react";
 
-const IMG_BASE = "https://www.pavillionsquare.com.my/wp-content/uploads/2025/07";
-const TOUR_URL = "/pano-viewer.html";
+/* ── BG images for this section ─────────────────────── */
+const bgSlides = [
+  { src: "/page_2_img_1.jpeg", label: "Pavilion Square — Aerial Overview" },
+  { src: "/page_4_img_2.jpeg", label: "Exterior Architecture" },
+  { src: "/page_5_img_2.jpeg", label: "Tower Elevation" },
+  { src: "/page_8_img_1.jpeg", label: "Sky Level Views" },
+  { src: "/page_2_img_2.jpeg", label: "Grand Entrance" },
+];
 
-const tourFeatures = [
-  { icon: Compass, title: "360° Compass Navigation", desc: "Explore every direction with intuitive compass controls" },
-  { icon: Building2, title: "Tower Selection", desc: "Switch between Residential Zones & Corporate Suites" },
-  { icon: MapPin, title: "Interactive Landmarks", desc: "Discover nearby attractions and key locations" },
+/* ── Preview thumbnails ──────────────────────────────── */
+const previews = [
+  { src: "/page_9_img_1.jpeg", label: "L67 Pool" },
+  { src: "/page_10_img_1.jpeg", label: "L66 Sky Deck" },
+  { src: "/page_11_img_1.jpeg", label: "L63A Gym" },
+  { src: "/page_15_img_17.jpeg", label: "Studio Interior" },
+  { src: "/page_15_img_21.jpeg", label: "2BR Living" },
+  { src: "/page_16_img_1.jpeg", label: "Corporate Suite" },
+  { src: "/page_18_img_1.jpeg", label: "Lobby" },
+];
+
+/* ── Features ────────────────────────────────────────── */
+const features = [
+  { icon: Compass, title: "360° Panoramic", desc: "Navigate every angle of Pavilion Square in full 360°" },
+  { icon: Eye, title: "True-to-Life View", desc: "Photorealistic renders of every level and unit type" },
+  { icon: Navigation, title: "Guided Tour", desc: "Move through the building floor-by-floor interactively" },
 ];
 
 export default function VirtualTour() {
-  const { ref: titleRef, isInView: titleVisible } = useInView();
-  const [tourLoaded, setTourLoaded] = useState(false);
-  const { ref: iframeTriggerRef, inView: shouldLoadIframe } = useInViewRIO({ triggerOnce: true, threshold: 0.05 });
+  const [current, setCurrent] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+  const [paused, setPaused] = useState(false);
+
+  const { ref: iframeRef, inView: iframeVisible } = useInViewRIO({ triggerOnce: true, threshold: 0.2 });
+
+  /* Auto-advance bg */
+  useEffect(() => {
+    if (paused) return;
+    const t = setInterval(() => setCurrent((c) => (c + 1) % bgSlides.length), 5500);
+    return () => clearInterval(t);
+  }, [paused]);
+
+  const goTo = (i: number) => { setCurrent(i); setPaused(true); setTimeout(() => setPaused(false), 9000); };
 
   return (
-    <section id="virtual-tour" className="relative py-32 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 luxury-gradient" />
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 1px 1px, rgba(196,162,101,0.5) 1px, transparent 0)",
-          backgroundSize: "50px 50px",
-        }}
-      />
+    <section id="virtual-tour" className="relative min-h-screen overflow-hidden bg-[#060914]">
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
+      {/* BG slider */}
+      {bgSlides.map((s, i) => (
+        <motion.div
+          key={i}
+          className="absolute inset-0"
+          animate={{ opacity: i === current ? 1 : 0 }}
+          transition={{ duration: 1.6, ease: "easeInOut" }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={s.src} alt={s.label} className="w-full h-full object-cover kb-zoom-bg" style={{ filter: "grayscale(30%) brightness(0.5)" }} />
+        </motion.div>
+      ))}
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#060914]/97 via-[#060914]/80 to-[#060914]/50" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#060914] via-transparent to-[#060914]/60" />
+      {/* Dot grid overlay */}
+      <div className="absolute inset-0 opacity-[0.018]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, rgba(201,168,76,0.8) 1px, transparent 0)", backgroundSize: "48px 48px" }} />
+
+      <div className="relative z-10 min-h-screen max-w-7xl mx-auto w-full px-6 py-28 flex flex-col">
+
         {/* Header */}
-        <div ref={titleRef} className="text-center mb-12">
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            animate={titleVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="inline-block text-[10px] uppercase tracking-[0.5em] text-gold mb-4"
+        <div className="mb-10">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="section-badge mb-5"
           >
-            Immersive Experience
-          </motion.span>
+            <View className="w-3 h-3" />
+            Immersive 360° Experience
+          </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
-            animate={titleVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-champagne mb-6"
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-4xl md:text-6xl font-heading font-black text-white leading-tight"
           >
-            360° Virtual
-            <br />
-            <span className="gold-gradient-text">Tour</span>
+            Virtual <em style={{ fontStyle: "normal", WebkitTextFillColor: "transparent", background: "linear-gradient(135deg,#c9a84c,#ffd700)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>Tour</em>
           </motion.h2>
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={titleVisible ? { scaleX: 1 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="section-divider mx-auto mb-6"
-          />
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={titleVisible ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-text-secondary max-w-2xl mx-auto font-light"
-          >
-            Step inside Pavilion Square from anywhere in the world.
-            Navigate through every tower, explore the panoramic skyline, and discover interactive landmarks.
-          </motion.p>
+          <div className="section-divider mt-4" />
         </div>
 
-        {/* ── Tour Feature Pills ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="flex flex-wrap justify-center gap-3 mb-10"
-        >
-          {tourFeatures.map((f, i) => (
-            <div key={f.title} className="flex items-center gap-2 px-4 py-2 rounded-full bg-dark-card/60 border border-glass-border">
-              <f.icon className="w-3.5 h-3.5 text-gold" />
-              <span className="text-xs text-champagne font-medium">{f.title}</span>
-            </div>
-          ))}
-        </motion.div>
+        <div className="flex-1 grid lg:grid-cols-5 gap-10 items-start">
 
-        {/* ── VR Tour Embed — Cinematic Frame ── */}
-        <motion.div
-          ref={iframeTriggerRef}
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.8 }}
-          className={`relative transition-all duration-700 ${isExpanded ? "fixed inset-0 z-[100] rounded-none p-0" : "rounded-2xl overflow-hidden glow-border-gold mb-12"}`}
-        >
-          {/* iframe embed */}
-          <div className={`relative bg-dark-card ${isExpanded ? "w-full h-full" : "w-full aspect-[16/9]"}`}>
-            {/* Loading skeleton */}
-            {!tourLoaded && shouldLoadIframe && (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-dark-card">
-                <RotateCcw className="w-8 h-8 text-gold/60 animate-spin mb-3" style={{ animationDuration: "2s" }} />
-                <span className="text-xs uppercase tracking-[0.4em] text-gold/50 font-medium">Initializing 360° Experience</span>
-                <div className="mt-4 w-48 h-1 bg-dark-elevated rounded-full overflow-hidden">
-                  <div className="h-full bg-gold/60 rounded-full shimmer-bar" />
-                </div>
+          {/* Left — features + controls */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="lg:col-span-2 flex flex-col gap-6"
+          >
+            <p className="text-white/65 text-[15px] leading-relaxed">
+              Step inside Pavilion Square KL without leaving your home. Our immersive 360° virtual tour lets you explore every floor — from the 118m sky pool to the luxurious residences and corporate suites.
+            </p>
+
+            {/* Feature cards */}
+            <div className="flex flex-col gap-3">
+              {features.map((f, i) => (
+                <motion.div
+                  key={f.title}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 * i }}
+                  className="group flex items-start gap-4 p-4 rounded-2xl glow-card glow-card-slow cursor-default"
+                >
+                  <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#c9a84c]/20 to-[#c9a84c]/5 border border-[#c9a84c]/25 flex items-center justify-center flex-shrink-0 group-hover:border-[#ffd700]/45 group-hover:shadow-[0_0_16px_rgba(255,215,0,0.15)] transition-all duration-300">
+                    <f.icon className="w-5 h-5 text-[#c9a84c]" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-white mb-1">{f.title}</div>
+                    <div className="text-xs text-white/60 leading-relaxed">{f.desc}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* BG slide dots */}
+            <div>
+              <div className="text-[10px] uppercase tracking-[0.3em] text-white/30 mb-3 font-semibold">Current View</div>
+              <div className="flex gap-2 items-center mb-2">
+                {bgSlides.map((_, i) => (
+                  <button key={i} onClick={() => goTo(i)} className={`slider-dot ${i === current ? "active" : "w-2 h-2"}`} />
+                ))}
               </div>
-            )}
-
-            {shouldLoadIframe && (
-              <iframe
-                src={TOUR_URL}
-                className={`absolute inset-0 w-full h-full border-0 transition-opacity duration-1000 ${tourLoaded ? "opacity-100" : "opacity-0"}`}
-                allowFullScreen
-                title="Pavilion Square KL — 360° Virtual Tour"
-                onLoad={() => setTourLoaded(true)}
-              />
-            )}
-
-            {/* Vignette for non-expanded */}
-            {!isExpanded && (
-              <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-dark-bg/30 via-transparent to-transparent z-[5]" />
-            )}
-          </div>
-
-          {/* Labels & Controls */}
-          <div className="absolute top-4 left-4 z-20">
-            <div className="glass-panel-gold rounded-lg px-4 py-2 flex items-center gap-2">
-              <RotateCcw className="w-3.5 h-3.5 text-gold animate-spin" style={{ animationDuration: "4s" }} />
-              <span className="text-xs font-semibold text-gold tracking-widest uppercase">
-                360° Interactive
-              </span>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={current}
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="text-xs text-white/40 italic"
+                >
+                  {bgSlides[current].label}
+                </motion.div>
+              </AnimatePresence>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="absolute top-4 right-4 z-20 flex gap-2">
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="glass-panel-gold rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gold/15 transition-colors cursor-pointer"
-            >
-              <Maximize2 className="w-3.5 h-3.5 text-gold" />
-              <span className="text-[10px] font-medium text-gold tracking-widest uppercase hidden sm:inline">
-                {isExpanded ? "Exit" : "Expand"}
-              </span>
-            </button>
-          </div>
-        </motion.div>
-
-        {/* Action buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-5"
-        >
-          <a
-            href={TOUR_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-8 py-4 bg-gold text-dark-bg text-sm uppercase tracking-[0.2em] font-semibold hover:bg-gold-bright transition-colors glow-pulse"
+          {/* Right — 360 iframe */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9 }}
+            className="lg:col-span-3 flex flex-col gap-4"
           >
-            <Eye className="w-4 h-4" />
-            Launch Full Virtual Tour
-          </a>
-          <a
-            href="https://www.pavillionsquare.com.my"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-4 border border-gold/30 text-gold text-sm uppercase tracking-[0.2em] font-medium hover:bg-gold/10 transition-all duration-500 hover:border-gold/60"
-          >
-            <ExternalLink className="w-4 h-4" />
-            Visit Official Website
-          </a>
-        </motion.div>
-
-        {/* Preview cards */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-5">
-          {[
-            {
-              img: `${IMG_BASE}/Pavillion-Square-Grand-Lobby-v1.webp`,
-              title: "Grand Lobby",
-              desc: "Experience the opulent arrival experience",
-            },
-            {
-              img: `${IMG_BASE}/Pavillion-Square-Sky-Facilities.webp`,
-              title: "Sky Facilities",
-              desc: "Explore facilities 67 storeys above KL",
-            },
-            {
-              img: `${IMG_BASE}/Pavillion-Square-Luxury-Residences-1.webp`,
-              title: "Luxury Residences",
-              desc: "Walk through our beautifully designed units",
-            },
-          ].map((card, i) => (
-            <motion.div
-              key={card.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="gradient-border-card group cursor-pointer overflow-hidden"
+            {/* Iframe container */}
+            <div
+              ref={iframeRef}
+              className={`relative rounded-3xl overflow-hidden border border-[#c9a84c]/20 transition-all duration-500 ${isExpanded ? "fixed inset-4 z-[150]" : "aspect-video"}`}
             >
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={card.img}
-                  alt={card.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              {/* Loading skeleton */}
+              {!iframeLoaded && (
+                <div className="absolute inset-0 bg-gradient-to-br from-[#101840] to-[#0b1030] flex flex-col items-center justify-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-[#c9a84c]/15 border border-[#c9a84c]/25 flex items-center justify-center">
+                    <RotateCcw className="w-8 h-8 text-[#c9a84c] animate-spin" style={{ animationDuration: "2s" }} />
+                  </div>
+                  <div className="text-sm text-white/50">Loading 360° Tour...</div>
+                  <div className="w-48 h-1 bg-white/8 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-[#c9a84c] to-[#ffd700] shimmer-bar rounded-full" />
+                  </div>
+                </div>
+              )}
+
+              {iframeVisible && (
+                <iframe
+                  src="/pano-viewer.html"
+                  className="w-full h-full border-0"
+                  allow="fullscreen; vr; xr"
+                  onLoad={() => setIframeLoaded(true)}
+                  title="Pavilion Square 360° Virtual Tour"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-card via-transparent to-transparent" />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              )}
+
+              {/* Overlay controls */}
+              <div className="absolute top-3 right-3 flex gap-2">
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="slider-arrow w-10 h-10"
+                >
+                  {isExpanded ? <Minimize className="w-4 h-4" /> : <Expand className="w-4 h-4" />}
+                </button>
+              </div>
+
+              {/* Tour indicator */}
+              <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                <span className="text-[11px] text-white/60 backdrop-blur-sm bg-[#060914]/50 px-2 py-1 rounded">
+                  Live 360° View — Click & Drag to Explore
+                </span>
+              </div>
+            </div>
+
+            {/* Preview strip — auto scroll */}
+            <div>
+              <div className="text-[10px] uppercase tracking-[0.3em] text-white/30 mb-3 font-semibold">Gallery Preview</div>
+              <div className="overflow-hidden rounded-xl">
+                <div className="flex gap-2" style={{ animation: "marquee 28s linear infinite", width: "max-content" }}>
+                  {[...previews, ...previews].map((p, i) => (
+                    <div key={i} className="relative w-28 h-19 rounded-xl overflow-hidden flex-shrink-0 border border-white/10 img-card-hover group cursor-pointer">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={p.src} alt={p.label} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" style={{ height: "72px" }} />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#060914]/80 via-transparent to-transparent" />
+                      <div className="absolute bottom-1 left-2 text-[8px] text-white/60 font-medium">{p.label}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="p-5">
-                <h3 className="text-lg font-heading font-semibold text-champagne mb-1">{card.title}</h3>
-                <p className="text-xs text-text-muted">{card.desc}</p>
-              </div>
-            </motion.div>
-          ))}
+            </div>
+
+            {/* Location CTA */}
+            <div className="flex gap-3">
+              <a href="#contact" className="btn-gold flex-1 rounded-xl py-3.5">
+                <MapPin className="w-4 h-4" />Book Gallery Visit
+              </a>
+              <a
+                href="https://www.pavillionsquare.com.my"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-ghost-gold flex-1 rounded-xl py-3.5"
+              >
+                <Compass className="w-4 h-4" />Official Site
+              </a>
+            </div>
+          </motion.div>
         </div>
       </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/50 to-transparent" />
     </section>
   );
 }

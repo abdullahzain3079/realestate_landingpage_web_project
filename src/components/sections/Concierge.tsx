@@ -1,244 +1,376 @@
-"use client";
+﻿"use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "@/hooks/useAnimations";
-import { Canvas } from "@react-three/fiber";
-import { Float, Environment, MeshReflectorMaterial } from "@react-three/drei";
-import { Suspense, useRef } from "react";
-import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import {
-  Car, Plane, Ship, Building2, Eye,
-  Phone, Shield, Shirt, Utensils, ConciergeBell, Crown,
+  Sparkles, Car, Eye, Building2, ConciergeBell, CheckCircle,
+  Star, Shield, ChevronLeft, ChevronRight, Anchor, Home,
 } from "lucide-react";
 
-const IMG = "https://www.pavillionsquare.com.my/wp-content/uploads/2025/07";
-
-const services = [
-  { icon: ConciergeBell, title: "24/7 Concierge", description: "Dedicated concierge team to attend to your every need, from restaurant reservations to event planning." },
-  { icon: Car, title: "Limousine Service", description: "Chauffeur-driven luxury vehicles for seamless airport transfers and city commutes." },
-  { icon: Plane, title: "Private Jet Charter", description: "Exclusive access to private aviation services for business and leisure travel." },
-  { icon: Ship, title: "Yacht Charter", description: "Premium yacht arrangements for coastal getaways and waterfront celebrations." },
-  { icon: Building2, title: "Property Management", description: "Comprehensive property management including maintenance, housekeeping, and rental services." },
-  { icon: Eye, title: "Exclusive Viewing", description: "Private show unit tours with personalised consultations and design walkthroughs." },
+const bgSlides = [
+  { src: "/page_18_img_1.jpeg",  label: "Grand Entrance Lobby" },
+  { src: "/page_9_img_1.jpeg",   label: "L67 Infinity Sky Pool" },
+  { src: "/page_10_img_1.jpeg",  label: "L66 Sky Garden & Lounge" },
+  { src: "/page_4_img_3.jpeg",   label: "Facade - Jalan Bukit Bintang" },
+  { src: "/page_15_img_25.jpeg", label: "Residence Interior" },
+  { src: "/page_15_img_23.jpeg", label: "Premium Suite" },
 ];
 
-const features = [
-  { icon: Crown, title: "HDA Compliant", desc: "Protected under the Housing Development Act" },
-  { icon: Shirt, title: "Fully Furnished", desc: "Move-in ready with luxury furnishings" },
-  { icon: Shield, title: "Multi-tier Security", desc: "24/7 security with smart access systems" },
-  { icon: Utensils, title: "F&B at Your Door", desc: "Direct access to Pavilion KL dining" },
+// OFFICIAL CONCIERGE SERVICES from Quick Fact for PSQ.docx
+const officialServices = [
+  {
+    icon: Sparkles,
+    title: "Housekeeping & Cleaning",
+    subtitle: "Official Service",
+    desc: "Professional housekeeping tailored to your schedule - from daily tidying to comprehensive deep cleans, ensuring your residence is always immaculate.",
+    color: "#6ee7b7",
+    glow: "rgba(110,231,183,0.22)",
+  },
+  {
+    icon: Anchor,
+    title: "Limousine, Private Jet & Yacht",
+    subtitle: "Official Service",
+    desc: "Bespoke land, air and sea arrangements - luxury chauffeur-driven transfers, private aviation bookings and exclusive yacht charter coordination.",
+    color: "#7dd3fc",
+    glow: "rgba(125,211,252,0.22)",
+  },
+  {
+    icon: Building2,
+    title: "Property Management & Viewing",
+    subtitle: "Official Service",
+    desc: "End-to-end property management - maintenance coordination, rental yield optimisation and private showflat viewings for prospective buyers.",
+    color: "#c9a84c",
+    glow: "rgba(201,168,76,0.28)",
+  },
 ];
 
-/* ── 3D Lobby Scene ───────────────────────────────────────────── */
-function ChandelierOrb() {
-  const ref = useRef<THREE.Mesh>(null);
-  useFrame((state) => {
-    if (ref.current) {
-      ref.current.position.y = 3.5 + Math.sin(state.clock.elapsedTime * 0.5) * 0.15;
-      ref.current.rotation.y = state.clock.elapsedTime * 0.3;
-    }
-  });
-  return (
-    <mesh ref={ref} position={[0, 3.5, 0]}>
-      <icosahedronGeometry args={[0.6, 2]} />
-      <meshStandardMaterial color="#c4a265" emissive="#c4a265" emissiveIntensity={0.8} wireframe transparent opacity={0.6} />
-    </mesh>
-  );
-}
+const extraServices = [
+  { icon: ConciergeBell, title: "24/7 Concierge Desk",   desc: "Round-the-clock personal concierge - restaurant reservations, event tickets and exclusive access." },
+  { icon: Shield,        title: "Multi-Tier Security",   desc: "Advanced CCTV, card-access and on-site security personnel providing absolute resident safety." },
+  { icon: Home,          title: "Fully Furnished Units", desc: "Every residence and corporate suite delivered exclusively fully furnished - move in from day one." },
+  { icon: Car,           title: "Valet & Drop-off",      desc: "Designer drop-off portico with dedicated valet parking for residents and guests." },
+  { icon: Eye,           title: "Private Viewings",      desc: "After-hours showflat viewings arranged by appointment through the dedicated concierge team." },
+  { icon: Star,          title: "Pavilion KL Link",      desc: "Pedestrian link bridge to Pavilion KL - 450+ retail, dining and entertainment options." },
+];
 
-function LobbyScene() {
-  return (
-    <>
-      <ambientLight intensity={0.15} />
-      <pointLight position={[0, 5, 0]} intensity={1.2} color="#e8d5a8" distance={15} decay={2} />
-      <pointLight position={[-4, 2, 2]} intensity={0.3} color="#c4a265" />
-      <spotLight position={[0, 6, 0]} angle={0.5} penumbra={0.8} intensity={0.8} color="#ffd480" />
-      <Environment preset="night" />
+// Project facts verified from Quick Fact for PSQ.docx
+const projectFacts = [
+  { label: "Developer",   value: "Armani Hartajaya Sdn Bhd", sub: "Under Pavilion Group" },
+  { label: "Tenure",      value: "Leasehold 2122",            sub: "Fully secure holding" },
+  { label: "Completion",  value: "Year 2030",                 sub: "58 months from SPA" },
+  { label: "Title",       value: "Commercial HDA",            sub: "Serviced Residence" },
+];
 
-      {/* Reflective floor */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]}>
-        <planeGeometry args={[20, 20]} />
-        <MeshReflectorMaterial
-          mirror={0.5}
-          resolution={512}
-          mixBlur={8}
-          mixStrength={0.6}
-          color="#141628"
-          metalness={0.8}
-          roughness={0.2}
-        />
-      </mesh>
-
-      {/* Pillars */}
-      {[-3, -1.5, 1.5, 3].map((x, i) => (
-        <Float key={i} speed={0.8} rotationIntensity={0} floatIntensity={0.1}>
-          <mesh position={[x, 2, -3]}>
-            <cylinderGeometry args={[0.12, 0.15, 4, 12]} />
-            <meshStandardMaterial color="#1c1828" metalness={0.9} roughness={0.1} />
-          </mesh>
-          <mesh position={[x, 4.05, -3]}>
-            <boxGeometry args={[0.4, 0.1, 0.4]} />
-            <meshStandardMaterial color="#c4a265" emissive="#c4a265" emissiveIntensity={0.3} metalness={0.95} roughness={0.05} />
-          </mesh>
-        </Float>
-      ))}
-
-      {/* Chandelier */}
-      <ChandelierOrb />
-
-      {/* Reception desk */}
-      <mesh position={[0, 0.5, -2]}>
-        <boxGeometry args={[3, 1, 0.6]} />
-        <meshStandardMaterial color="#1c1828" metalness={0.7} roughness={0.2} />
-      </mesh>
-      <mesh position={[0, 1.01, -2]}>
-        <boxGeometry args={[3.1, 0.03, 0.65]} />
-        <meshStandardMaterial color="#c4a265" emissive="#c4a265" emissiveIntensity={0.15} metalness={0.95} roughness={0.05} />
-      </mesh>
-    </>
-  );
-}
+const stats = [
+  { value: "960",  label: "Luxury Residences" },
+  { value: "106",  label: "Corporate Suites" },
+  { value: "70K",  label: "sq.ft. Facilities" },
+  { value: "24/7", label: "Concierge" },
+];
 
 export default function Concierge() {
-  const { ref: titleRef, isInView: titleVisible } = useInView();
+  const [current, setCurrent]         = useState(0);
+  const [paused, setPaused]           = useState(false);
+  const [activeExtra, setActiveExtra] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (paused) return;
+    const t = setInterval(() => setCurrent((c) => (c + 1) % bgSlides.length), 5500);
+    return () => clearInterval(t);
+  }, [paused]);
+
+  const goTo = (i: number) => { setCurrent(i); setPaused(true); setTimeout(() => setPaused(false), 9000); };
+  const prev = () => goTo((current - 1 + bgSlides.length) % bgSlides.length);
+  const next = () => goTo((current + 1) % bgSlides.length);
 
   return (
-    <section id="concierge" className="relative py-32 overflow-hidden">
-      {/* Background — increased brightness */}
-      <div className="absolute inset-0">
-        <img
-          src={`${IMG}/Pavillion-Square-Grand-Lobby-v1.webp`}
-          alt="Grand Lobby"
-          className="w-full h-full object-cover kenburns"
-          style={{ filter: "brightness(0.2) saturate(0.6)" }}
-        />
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-b from-dark-bg/70 via-transparent to-dark-bg/80" />
+    <section id="concierge" className="relative min-h-screen overflow-hidden bg-[#060914]">
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div ref={titleRef} className="text-center mb-20">
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            animate={titleVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="inline-block text-[10px] uppercase tracking-[0.5em] text-gold mb-4"
+      {/* BG Slider */}
+      {bgSlides.map((s, i) => (
+        <motion.div
+          key={i}
+          className="absolute inset-0"
+          animate={{ opacity: i === current ? 1 : 0 }}
+          transition={{ duration: 2, ease: "easeInOut" }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={s.src}
+            alt={s.label}
+            className="w-full h-full object-cover kb-zoom-bg"
+            style={{ filter: "brightness(0.35) saturate(0.8)" }}
+          />
+        </motion.div>
+      ))}
+      {/* Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#060914]/98 via-[#060914]/78 to-[#060914]/35" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#060914] via-transparent to-[#060914]/55" />
+      <div
+        className="absolute inset-0 opacity-[0.025]"
+        style={{ backgroundImage: "radial-gradient(ellipse 60% 50% at 70% 50%, rgba(201,168,76,1) 0%, transparent 70%)" }}
+      />
+
+      {/* BG Controls */}
+      <div className="absolute bottom-10 right-6 flex flex-col items-end gap-2 z-20">
+        <div className="flex items-center gap-2">
+          <button onClick={prev} className="slider-arrow w-9 h-9"><ChevronLeft className="w-3.5 h-3.5" /></button>
+          <div className="flex gap-1.5">
+            {bgSlides.map((_, i) => (
+              <button key={i} onClick={() => goTo(i)} className={`slider-dot ${i === current ? "active" : ""}`} />
+            ))}
+          </div>
+          <button onClick={next} className="slider-arrow w-9 h-9"><ChevronRight className="w-3.5 h-3.5" /></button>
+        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            className="text-[10px] text-white/30 italic text-right"
           >
-            White Glove Service
-          </motion.span>
+            {bgSlides[current].label}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-6 pt-28 pb-24">
+
+        {/* Header */}
+        <div className="mb-14">
+          <motion.div
+            initial={{ opacity: 0, y: -18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="section-badge mb-5"
+          >
+            <ConciergeBell className="w-3 h-3" />White-Glove Living &middot; Pavilion Group
+          </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
-            animate={titleVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-champagne mb-6"
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-4xl md:text-6xl font-heading font-black text-white leading-tight"
           >
-            Bespoke
-            <br />
-            <span className="gold-gradient-text">Concierge Services</span>
+            Concierge &amp; <br className="hidden md:block" />
+            <span style={{ WebkitTextFillColor: "transparent", background: "linear-gradient(135deg,#c9a84c 0%,#ffd700 50%,#f0d070 100%)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>
+              Lifestyle Services
+            </span>
           </motion.h2>
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={titleVisible ? { scaleX: 1 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="section-divider mx-auto mb-6"
-          />
+          <div className="section-divider mt-4 mb-5" />
           <motion.p
             initial={{ opacity: 0 }}
-            animate={titleVisible ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-text-secondary max-w-2xl mx-auto font-light"
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="text-white/72 text-[15px] leading-relaxed max-w-xl"
           >
-            Experience unparalleled luxury with our dedicated concierge team,
-            providing world-class services tailored to your every need.
+            Pavilion Square, developed by{" "}
+            <strong className="text-[#e8c050] font-bold">Armani Hartajaya Sdn Bhd under Pavilion Group</strong>,
+            delivers an unrivalled suite of bespoke concierge services for residents who expect nothing less than extraordinary.
           </motion.p>
         </div>
 
-        {/* Services Grid — improved icons */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-20">
-          {services.map((service, i) => (
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-14"
+        >
+          {stats.map((s, i) => (
             <motion.div
-              key={service.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              key={s.value}
+              initial={{ opacity: 0, scale: 0.85 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.08 }}
-              className="gradient-border-card p-7 group hover:bg-dark-elevated transition-all duration-500"
+              transition={{ delay: i * 0.08 }}
+              className="glow-card rounded-2xl text-center py-6 px-3"
             >
-              <div className="icon-luxury mb-5">
-                <service.icon className="w-6 h-6 text-gold" />
-              </div>
-              <h3 className="text-lg font-heading font-semibold text-champagne mb-3">{service.title}</h3>
-              <p className="text-sm text-text-muted leading-relaxed">{service.description}</p>
+              <div className="stat-number text-3xl md:text-4xl font-black mb-1">{s.value}</div>
+              <div className="text-[11px] text-white/60 uppercase tracking-[0.22em] font-semibold">{s.label}</div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        {/* 3D Lobby + Features */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* 3D Lobby */}
+        <div className="grid lg:grid-cols-3 gap-10">
+
+          {/* Official Services + Extra grid */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.9 }}
-            className="relative h-[450px] rounded-2xl overflow-hidden glow-border-gold"
+            transition={{ duration: 0.8 }}
+            className="lg:col-span-2 flex flex-col gap-5"
           >
-            <Suspense fallback={<div className="w-full h-full bg-dark-card flex items-center justify-center text-text-muted text-sm">Loading 3D Lobby...</div>}>
-              <Canvas camera={{ position: [0, 3, 7], fov: 50 }} dpr={[1, 1.5]}>
-                <LobbyScene />
-              </Canvas>
-            </Suspense>
-            <div className="absolute top-4 left-4 glass-panel-gold rounded-lg px-4 py-2">
-              <div className="text-xs font-semibold text-gold tracking-widest uppercase">Interactive 3D Lobby</div>
+            <div className="text-[10px] uppercase tracking-[0.35em] text-[#c9a84c]/70 font-bold mb-1">
+              Official Pavilion Concierge Services
+            </div>
+
+            {/* 3 official cards with glow-card border animation */}
+            <div className="flex flex-col gap-4">
+              {officialServices.map((svc, i) => (
+                <motion.div
+                  key={svc.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="glow-card rounded-2xl p-6 flex gap-5 items-start"
+                >
+                  <div
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300"
+                    style={{
+                      background: `linear-gradient(135deg, ${svc.glow}, transparent)`,
+                      border: `1.5px solid ${svc.color}44`,
+                      boxShadow: `0 0 20px ${svc.glow}`,
+                    }}
+                  >
+                    <svc.icon className="w-7 h-7" style={{ color: svc.color }} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <span className="text-[15px] font-bold text-white">{svc.title}</span>
+                      <span
+                        className="text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-[0.18em]"
+                        style={{
+                          background: `${svc.color}18`,
+                          border: `1px solid ${svc.color}35`,
+                          color: svc.color,
+                        }}
+                      >
+                        {svc.subtitle}
+                      </span>
+                    </div>
+                    <p className="text-[13px] text-white/72 leading-relaxed">{svc.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Extra services compact grid */}
+            <div className="mt-2">
+              <div className="text-[10px] uppercase tracking-[0.35em] text-white/35 font-bold mb-3">
+                Additional Premium Services
+              </div>
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {extraServices.map((svc, i) => (
+                  <motion.div
+                    key={svc.title}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.05 }}
+                    onMouseEnter={() => setActiveExtra(i)}
+                    onMouseLeave={() => setActiveExtra(null)}
+                    className="glow-card glow-card-slow rounded-xl p-4 flex flex-col gap-2.5 cursor-default"
+                  >
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300"
+                      style={{
+                        background: activeExtra === i ? "rgba(201,168,76,0.18)" : "rgba(201,168,76,0.07)",
+                        border: `1px solid ${activeExtra === i ? "rgba(255,215,0,0.45)" : "rgba(201,168,76,0.2)"}`,
+                        boxShadow: activeExtra === i ? "0 0 14px rgba(255,215,0,0.2)" : "none",
+                      }}
+                    >
+                      <svc.icon
+                        className="w-5 h-5 transition-colors duration-300"
+                        style={{ color: activeExtra === i ? "#ffd700" : "#c9a84c" }}
+                      />
+                    </div>
+                    <div>
+                      <div className="text-[13px] font-bold text-white mb-1 leading-tight">{svc.title}</div>
+                      <div className="text-[11px] text-white/60 leading-relaxed">{svc.desc}</div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </motion.div>
 
-          {/* Features — improved icons */}
+          {/* Right Panel */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
+            initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.9 }}
-            className="space-y-5"
+            transition={{ duration: 0.8 }}
+            className="flex flex-col gap-4"
           >
-            <h3 className="text-2xl font-heading font-semibold text-champagne mb-6">
-              Living Beyond Expectations
-            </h3>
-            {features.map((f, i) => (
-              <motion.div
-                key={f.title}
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="flex items-start gap-4 p-5 rounded-xl bg-dark-card/60 border border-glass-border hover:border-gold/20 transition-all duration-500 group"
-              >
-                <div className="icon-luxury !w-11 !h-11 flex-shrink-0">
-                  <f.icon className="w-5 h-5 text-gold" />
+            {/* Project facts */}
+            <div className="glow-card rounded-2xl p-6">
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-8 h-8 rounded-lg bg-[#c9a84c]/12 border border-[#c9a84c]/25 flex items-center justify-center">
+                  <Building2 className="w-4 h-4 text-[#c9a84c]" />
                 </div>
-                <div>
-                  <div className="text-sm font-semibold text-champagne mb-1">{f.title}</div>
-                  <div className="text-xs text-text-muted">{f.desc}</div>
-                </div>
-              </motion.div>
-            ))}
-
-            {/* CTA */}
-            <div className="pt-4">
-              <a
-                href="https://wa.link/9ckvr8"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-8 py-4 bg-gold text-dark-bg text-sm uppercase tracking-[0.2em] font-semibold hover:bg-gold-bright transition-colors"
-              >
-                <Phone className="w-4 h-4" />
-                Schedule a Private Viewing
-              </a>
+                <span className="text-sm font-bold text-white">Project Overview</span>
+              </div>
+              <div className="flex flex-col gap-0">
+                {projectFacts.map((f) => (
+                  <div key={f.label} className="flex items-start justify-between gap-3 py-3 border-b border-white/6 last:border-0">
+                    <span className="text-[11px] text-white/45 uppercase tracking-[0.14em] font-semibold flex-shrink-0">
+                      {f.label}
+                    </span>
+                    <div className="text-right">
+                      <div className="text-[13px] font-bold text-white/92">{f.value}</div>
+                      <div className="text-[10px] text-white/38">{f.sub}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* Highlights */}
+            <div className="glow-card rounded-2xl p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Star className="w-4 h-4 text-[#c9a84c] fill-[#c9a84c]" />
+                <span className="text-sm font-bold text-white">Why Pavilion Square?</span>
+              </div>
+              <ul className="flex flex-col gap-3">
+                {[
+                  "Exclusively fully furnished  move-in ready",
+                  "Direct link bridge to Pavilion KL Mall",
+                  "Opposite Pavilion KL, Jalan Bukit Bintang",
+                  "Commercial HDA title  full legal protection",
+                  "70,000 sq.ft. lifestyle facilities, 4 levels",
+                  "Leasehold till 2122  96+ years remaining",
+                ].map((h) => (
+                  <li key={h} className="flex items-start gap-2.5">
+                    <CheckCircle className="w-4 h-4 text-[#c9a84c] flex-shrink-0 mt-0.5" />
+                    <span className="text-[13px] text-white/75 leading-relaxed">{h}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Tagline */}
+            <div className="relative rounded-2xl overflow-hidden p-5 bg-gradient-to-br from-[#c9a84c]/15 to-[#192050]/40 border border-[#c9a84c]/25">
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/70 to-transparent" />
+              <div className="text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]/65 font-semibold mb-2.5">Our Promise</div>
+              <p className="text-white/82 text-[13px] leading-relaxed italic">
+                &ldquo;From the moment you arrive to every quiet evening at home &mdash; invisible, indispensable, and always exceptional.&rdquo;
+              </p>
+              <div className="mt-3 text-[10px] text-white/32"> Pavilion Square Concierge Team</div>
+            </div>
+
+            <a href="#contact" className="btn-gold rounded-xl py-4 justify-center w-full">
+              <ConciergeBell className="w-4 h-4" />Register Your Interest
+            </a>
+            <a
+              href="https://wa.link/kgsiw7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-ghost-gold rounded-xl py-4 justify-center w-full"
+            >
+              <Anchor className="w-4 h-4" />WhatsApp Enquiry
+            </a>
           </motion.div>
         </div>
       </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/50 to-transparent" />
     </section>
   );
 }

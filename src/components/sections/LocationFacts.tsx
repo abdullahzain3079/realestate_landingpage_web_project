@@ -1,275 +1,317 @@
 "use client";
 
-import { motion, useScroll, useTransform, useMotionTemplate, useMotionValue } from "framer-motion";
-import { useRef, useState, useEffect, MouseEvent } from "react";
-import { useInView } from "@/hooks/useAnimations";
-import CountUp from "react-countup";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 import { useInView as useInViewRIO } from "react-intersection-observer";
-import { MapPin, Train, ShoppingBag, Building2, Landmark, TrendingUp, Timer, Ruler, RotateCcw, Map, Scan, Globe, Maximize, Minimize } from "lucide-react";
-import Particles from "../ui/Particles";
+import {
+  MapPin, Train, ShoppingBag, Building2, Landmark, Plane, Car,
+  ArrowRight, ChevronLeft, ChevronRight, Star, Globe, Wifi,
+  TrendingUp, Eye, Navigation
+} from "lucide-react";
 
-const IMG = "https://www.pavillionsquare.com.my/wp-content/uploads/2025/07";
-const TOUR_URL = "https://pavilionsquarekl.com/ISP/";
-
-const quickFacts = [
-  { icon: Building2, label: "Storeys", value: 67, suffix: "" },
-  { icon: Landmark, label: "Luxury Units", value: 960, suffix: "+" },
-  { icon: Ruler, label: "Land Size (Acres)", value: 2.023, suffix: "", decimals: 3 },
-  { icon: TrendingUp, label: "Corporate Suites", value: 106, suffix: "" },
-  { icon: Timer, label: "Infinity Pool (m)", value: 118, suffix: "" },
-  { icon: ShoppingBag, label: "Facilities (sq.ft.)", value: 70000, suffix: "+", separator: "," },
+/* ── Slide images ─────────────────────────────────────── */
+const slides = [
+  {
+    src: "/pavilionmainview.jpeg",
+    headline: "The Epicentre of KL",
+    sub: "75A Jalan Raja Chulan, Bukit Bintang",
+  },
+  {
+    src: "/page_3_img_1.jpeg",
+    headline: "Prime Golden Triangle",
+    sub: "Steps from Pavilion KL via direct link bridge",
+  },
+  {
+    src: "/page_4_img_1.jpeg",
+    headline: "Connected to Everything",
+    sub: "MRT, Monorail, KLCC — all within walking distance",
+  },
+  {
+    src: "/page_6_img_1.jpeg",
+    headline: "Bukit Bintang Landmark",
+    sub: "Where luxury living meets world-class convenience",
+  },
+  {
+    src: "/page_7_img_1.jpeg",
+    headline: "KL's Most Coveted Address",
+    sub: "67 storeys of architectural brilliance",
+  },
 ];
 
-const nearbyPlaces = [
-  { name: "Pavilion KL Mall", distance: "Direct Link Bridge", icon: ShoppingBag },
-  { name: "KLCC / Petronas Towers", distance: "1.5 km", icon: Building2 },
-  { name: "Bukit Bintang MRT", distance: "Walking Distance", icon: Train },
-  { name: "Raja Chulan Monorail", distance: "300m", icon: Train },
-  { name: "KL Tower", distance: "1 km", icon: Landmark },
-  { name: "Jalan Raja Chulan", distance: "Direct Frontage", icon: MapPin },
+/* ── Quick Facts ─────────────────────────────────────── */
+const facts = [
+  { value: "67", label: "Storeys", icon: Building2 },
+  { value: "960+", label: "Residences", icon: Landmark },
+  { value: "118m", label: "Infinity Pool", icon: Star },
+  { value: "106", label: "Corp Suites", icon: TrendingUp },
+  { value: "30K sqft", label: "Facilities", icon: Globe },
+  { value: "Freehold", label: "Tenure", icon: Wifi },
 ];
 
-/* ── Holographic Card Component ───────────────────────── */
-/* ── Crystal Tech Card Component ──────────────────────── */
-function HoloCard({ children, className = "", delay = 0 }: { children: React.ReactNode, className?: string, delay?: number }) {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+/* ── Connectivity ────────────────────────────────────── */
+const connectivity = [
+  { name: "Pavilion KL Mall", detail: "Direct link bridge — no outdoor walk", icon: ShoppingBag, highlight: true },
+  { name: "Bukit Bintang MRT", detail: "Walking distance, 3 min", icon: Train, highlight: true },
+  { name: "Raja Chulan Monorail", detail: "300 metres away", icon: Train, highlight: false },
+  { name: "KLCC / Petronas Towers", detail: "1.5 km — 5 min drive", icon: Building2, highlight: false },
+  { name: "KL Tower", detail: "1 km panoramic landmark", icon: Landmark, highlight: false },
+  { name: "KL International Airport", detail: "55 min via KLIA Ekspres", icon: Plane, highlight: false },
+  { name: "Elite Highway / Smart Tunnel", detail: "Direct highway access", icon: Car, highlight: false },
+  { name: "Starhill Gallery", detail: "Adjacent luxury retail hub", icon: Star, highlight: false },
+];
 
-  function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
-    const { left, top } = currentTarget.getBoundingClientRect();
-    mouseX.set(clientX - left);
-    mouseY.set(clientY - top);
-  }
+/* ── Full-bleed BG Slider ────────────────────────────── */
+function BgSlider({ current, slides }: { current: number; slides: { src: string; headline: string; sub: string }[] }) {
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {slides.map((s, i) => (
+        <motion.div
+          key={i}
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: i === current ? 1 : 0 }}
+          transition={{ duration: 1.6, ease: "easeInOut" }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={s.src}
+            alt={s.headline}
+            className="w-full h-full object-cover kb-zoom-bg"
+          />
+        </motion.div>
+      ))}
+      {/* Deep navy gradient overlay — left-heavy for readability */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#060914]/95 via-[#060914]/70 to-[#060914]/30" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#060914] via-transparent to-[#060914]/60" />
+      {/* Gold shimmer line at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/60 to-transparent" />
+    </div>
+  );
+}
 
+/* ── Animated counter ────────────────────────────────── */
+function StatItem({ value, label, icon: Icon, delay }: { value: string; label: string; icon: React.ElementType; delay: number }) {
+  const { ref, inView } = useInViewRIO({ triggerOnce: true, threshold: 0.3 });
   return (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      whileHover={{ y: -10, scale: 1.02 }}
-      transition={{ duration: 0.6, delay, type: "spring", stiffness: 200, damping: 20 }}
-      className={`group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] ${className}`}
-      onMouseMove={handleMouseMove}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay }}
+      className="group flex flex-col items-center text-center gap-2"
     >
-      {/* ── Glass Shimmer Effect ── */}
-      <motion.div
-        className="pointer-events-none absolute -inset-px opacity-0 transition duration-500 group-hover:opacity-100 z-10"
-        style={{
-          background: useMotionTemplate`
-            radial-gradient(
-              600px circle at ${mouseX}px ${mouseY}px,
-              rgba(255, 255, 255, 0.15),
-              transparent 60%
-            )
-          `,
-        }}
-      />
-
-      {/* ── Geometric Accents ── */}
-      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white/10 to-transparent opacity-20 blur-2xl rounded-bl-full pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-16 h-16 bg-gold/10 blur-xl rounded-tr-full pointer-events-none" />
-
-      {/* ── Content ── */}
-      <div className="relative z-20 h-full p-6 flex flex-col items-center justify-center">
-        {children}
+      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#c9a84c]/20 to-[#c9a84c]/5 border border-[#c9a84c]/25 flex items-center justify-center mb-1 group-hover:border-[#ffd700]/50 group-hover:shadow-[0_0_20px_rgba(255,215,0,0.15)] transition-all duration-400">
+        <Icon className="w-5 h-5 text-[#c9a84c]" />
       </div>
-
-      {/* ── Border Highlight ── */}
-      <div className="absolute inset-0 rounded-2xl border border-white/5 pointer-events-none transition-colors group-hover:border-gold/30" />
+      <div className="text-2xl font-heading font-black stat-number leading-none">{value}</div>
+      <div className="text-[10px] uppercase tracking-[0.2em] text-white/62 font-medium">{label}</div>
     </motion.div>
   );
 }
 
 export default function LocationFacts() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const bgY = useTransform(scrollYProgress, [0, 1], [-50, 50]);
-  const { ref: titleRef, isInView: titleVisible } = useInView();
-  const { ref: counterRef, inView: counterInView } = useInViewRIO({ triggerOnce: true, threshold: 0.2 });
-  const [tourLoaded, setTourLoaded] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const { ref: tourTriggerRef, inView: tourInView } = useInViewRIO({ triggerOnce: true, threshold: 0.1 });
+  const [current, setCurrent] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const { ref: statsRef, inView: statsInView } = useInViewRIO({ triggerOnce: true, threshold: 0.1 });
 
+  /* Auto-advance slider */
   useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
-  }, []);
+    if (isPaused) return;
+    const t = setInterval(() => setCurrent((c) => (c + 1) % slides.length), 5000);
+    return () => clearInterval(t);
+  }, [isPaused]);
+
+  const goTo = (i: number) => { setCurrent(i); setIsPaused(true); setTimeout(() => setIsPaused(false), 8000); };
+  const prev = () => goTo((current - 1 + slides.length) % slides.length);
+  const next = () => goTo((current + 1) % slides.length);
 
   return (
-    <section id="location" ref={sectionRef} className="relative py-32 overflow-hidden bg-[#0e0f1a]">
+    <section id="location" ref={sectionRef} className="relative min-h-screen overflow-hidden bg-[#060914]">
+      <BgSlider current={current} slides={slides} />
 
-      {/* ── Background: Cyber Grid & Particles ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] z-10"></div>
+      {/* Content */}
+      <div className="relative z-10 min-h-screen flex flex-col">
+        <div className="flex-1 max-w-7xl mx-auto w-full px-6 pt-28 pb-12 grid lg:grid-cols-2 gap-12 items-center">
 
-        <motion.div style={{ y: bgY }} className="absolute inset-0 opacity-60 mix-blend-screen">
-          <img
-            src={`${IMG}/Pavillion-Square-Street-View.webp`}
-            alt="Background"
-            className="w-full h-[120%] object-cover contrast-125 saturate-0 kenburns"
-          />
-        </motion.div>
+          {/* LEFT — Hero text + slide info */}
+          <div>
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="section-badge mb-6"
+            >
+              <Navigation className="w-3 h-3" />
+              Prime Location — Bukit Bintang, KL
+            </motion.div>
 
-        {/* Lighter Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0e0f1a] via-[#0e0f1a]/40 to-[#0e0f1a] z-0"></div>
+            {/* Slide headline */}
+            <div className="overflow-hidden mb-3">
+              <AnimatePresence mode="wait">
+                <motion.h1
+                  key={current}
+                  initial={{ y: 60, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -40, opacity: 0 }}
+                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-5xl md:text-6xl lg:text-7xl font-heading font-black text-white leading-[0.9] tracking-tight"
+                >
+                  {slides[current].headline.split(" ").map((w, i) =>
+                    i === slides[current].headline.split(" ").length - 1 ? (
+                      <span key={i} className="text-glow-gold" style={{ WebkitTextFillColor: "transparent", background: "linear-gradient(135deg,#c9a84c,#ffd700,#f0d070)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>{w} </span>
+                    ) : <span key={i}>{w} </span>
+                  )}
+                </motion.h1>
+              </AnimatePresence>
+            </div>
 
-        <Particles className="absolute inset-0 z-20" quantity={40} staticity={30} />
-      </div>
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={`sub-${current}`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.5, delay: 0.15 }}
+                className="text-white/60 text-base mb-8 font-light"
+              >
+                {slides[current].sub}
+              </motion.p>
+            </AnimatePresence>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-
-        {/* ── Section Header: Typewriter Reveal ── */}
-        <div ref={titleRef} className="text-center mb-24 relative">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={titleVisible ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 1 }}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gold/10 blur-[120px] rounded-full pointer-events-none"
-          />
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={titleVisible ? { opacity: 1, y: 0 } : {}}
-            className="inline-flex items-center gap-2 px-6 py-2 rounded-full border border-gold/40 bg-[#0e0f1a]/60 backdrop-blur-md mb-8 shadow-[0_0_20px_rgba(196,162,101,0.2)]"
-          >
-            <Globe className="w-3 h-3 text-gold animate-pulse" />
-            <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-bold">Prime Coordinates</span>
-          </motion.div>
-
-          <h2 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white mb-8 tracking-tighter leading-[0.9] drop-shadow-2xl">
-            <span className="block text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] text-4xl md:text-6xl mb-2 animate-pulse-slow">The Epicentre of</span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#c4a265] via-[#e8d5a8] to-[#c4a265] bg-[length:200%_auto] animate-shimmer drop-shadow-[0_0_30px_rgba(196,162,101,0.4)]">
-              Kuala Lumpur
-            </span>
-          </h2>
-
-          <p className="text-white/90 max-w-2xl mx-auto text-lg font-light leading-relaxed drop-shadow-md">
-            Situated on <span className="text-gold font-semibold animate-pulse">Jalan Raja Chulan</span> in the vibrant heart of Bukit Bintang.
-            A melting pot where lives intersect — connected directly to Pavilion KL Mall.
-          </p>
-        </div>
-
-        {/* ── Holo-Deck Stats Grid ── */}
-        <div ref={counterRef} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-32">
-          {quickFacts.map((stat, i) => (
-            <HoloCard key={stat.label} delay={i * 0.1} className="h-full">
-
-              <div className="mb-5 p-3 rounded-full bg-gradient-to-br from-white/10 to-transparent border border-white/10 shadow-inner group-hover:border-gold/50 transition-colors duration-500">
-                <stat.icon className="w-6 h-6 text-white/80 group-hover:text-gold transition-colors duration-300" />
+            {/* Slide progress bar */}
+            <div className="flex items-center gap-3 mb-10">
+              {slides.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goTo(i)}
+                  className={`slider-dot transition-all duration-500 ${i === current ? "active w-8" : "w-3"}`}
+                />
+              ))}
+              <div className="ml-auto flex gap-2">
+                <button onClick={prev} className="slider-arrow"><ChevronLeft className="w-4 h-4" /></button>
+                <button onClick={next} className="slider-arrow"><ChevronRight className="w-4 h-4" /></button>
               </div>
+            </div>
 
-              <div className="text-3xl lg:text-4xl font-heading font-bold mb-2 break-all sm:break-normal">
-                <span className="bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40 drop-shadow-lg filter group-hover:drop-shadow-[0_0_10px_rgba(196,162,101,0.5)] transition-all duration-300">
-                  {counterInView ? (
-                    <CountUp end={stat.value} duration={3.5} decimals={stat.decimals ?? 0} separator={stat.separator ?? ""} suffix={stat.suffix} />
-                  ) : "0"}
-                </span>
+            {/* Connectivity list */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <div className="text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]/70 mb-4 font-semibold">Connectivity & Surroundings</div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {connectivity.map((item, i) => (
+                  <motion.div
+                    key={item.name}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.05 * i }}
+                    className={`group flex items-start gap-3 p-3 rounded-xl transition-all duration-300 cursor-default ${item.highlight
+                      ? "bg-gradient-to-r from-[#c9a84c]/12 to-transparent border border-[#c9a84c]/20 hover:border-[#ffd700]/35"
+                      : "hover:bg-white/5 border border-transparent"
+                    }`}
+                  >
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300 ${item.highlight ? "bg-[#c9a84c]/20 border border-[#c9a84c]/30" : "bg-white/8 border border-white/10"} group-hover:border-[#c9a84c]/40`}>
+                      <item.icon className={`w-3.5 h-3.5 ${item.highlight ? "text-[#c9a84c]" : "text-white/50"} group-hover:text-[#c9a84c] transition-colors`} />
+                    </div>
+                    <div>
+                      <div className={`text-sm font-semibold ${item.highlight ? "text-[#f0d070]" : "text-white/85"} group-hover:text-white transition-colors leading-tight`}>{item.name}</div>
+                      <div className="text-[11px] text-white/60 group-hover:text-white/80 transition-colors mt-0.5">{item.detail}</div>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
+            </motion.div>
+          </div>
 
-              <div className="h-px w-10 bg-gradient-to-r from-transparent via-gold/50 to-transparent my-3 opacity-30 group-hover:opacity-100 group-hover:w-20 transition-all duration-500" />
-
-              <div className="text-[10px] uppercase tracking-[0.2em] text-white/60 font-medium text-center leading-relaxed group-hover:text-gold/80 transition-colors">
-                {stat.label}
-              </div>
-
-            </HoloCard>
-          ))}
-        </div>
-
-        {/* ── Interactive 360 Map Module ── */}
-        <div className="grid lg:grid-cols-12 gap-6 items-stretch mb-32 h-auto lg:h-[600px]">
-
-          {/* Left: Interactive Map Card */}
+          {/* RIGHT — Big stats grid + map CTA */}
           <motion.div
-            id="map-container"
-            ref={tourTriggerRef}
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: 60 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className={`relative rounded-3xl overflow-hidden border border-gold/20 bg-[#0e0f1a] shadow-[0_0_40px_rgba(0,0,0,0.5)] group lg:col-span-8 h-full min-h-[400px] flex flex-col ${isFullscreen ? "fixed inset-0 z-[100] rounded-none" : ""
-              }`}
+            transition={{ duration: 0.9, delay: 0.1 }}
+            className="flex flex-col gap-6"
           >
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-50 z-20"></div>
-
-            {/* 360 Viewer */}
-            <div className="relative w-full h-full bg-dark-card flex-grow">
-              {!tourLoaded && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-dark-card z-10">
-                  <Scan className="w-8 h-8 text-gold/50 animate-pulse mb-4" />
-                  <span className="text-xs uppercase tracking-widest text-white/30">Initializing Satellite Feed...</span>
+            {/* Project title card */}
+            <div className="glow-card rounded-3xl p-7">
+              <div className="flex items-start justify-between mb-5">
+                <div>
+                  <div className="text-[10px] uppercase tracking-[0.35em] text-[#c9a84c]/70 mb-2 font-semibold">Pavilion Group Development</div>
+                  <h3 className="text-2xl font-heading font-black text-white">Pavilion Square KL</h3>
+                  <p className="text-white/68 text-sm mt-1">Armani Hartajaya Sdn Bhd</p>
                 </div>
-              )}
-              {tourInView && (
-                <iframe
-                  src={TOUR_URL}
-                  className={`absolute inset-0 w-full h-full border-0 transition-opacity duration-1000 ${tourLoaded ? "opacity-100" : "opacity-0"}`}
-                  allowFullScreen
-                  loading="lazy"
-                  onLoad={() => setTourLoaded(true)}
-                />
-              )}
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#c9a84c]/20 to-[#c9a84c]/5 border border-[#c9a84c]/25 flex items-center justify-center">
+                  <Building2 className="w-7 h-7 text-[#c9a84c]" />
+                </div>
+              </div>
 
-              {/* Controls Overlay */}
-              <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-white/10 rounded-3xl z-20" />
+              <p className="text-white/60 text-sm leading-relaxed mb-5">
+                A 67-storey mixed landmark at the heart of Kuala Lumpur&apos;s Golden Triangle — directly connected to Pavilion KL Mall via an exclusive link bridge. Freehold, fully furnished, world-class.
+              </p>
 
-              {/* Fullscreen Toggle */}
-              <button
-                onClick={() => {
-                  const elem = document.getElementById('map-container');
-                  if (!document.fullscreenElement) {
-                    elem?.requestFullscreen().catch(err => {
-                      console.error(`Error attempting to enable fullscreen: ${err.message}`);
-                    });
-                    setIsFullscreen(true);
-                  } else {
-                    document.exitFullscreen();
-                    setIsFullscreen(false);
-                  }
-                }}
-                className="absolute top-6 right-6 pointer-events-auto z-30 bg-black/60 backdrop-blur-md p-2 rounded-lg border border-white/10 text-white/70 hover:text-gold hover:bg-white/10 transition-all active:scale-95"
-              >
-                {isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
-              </button>
+              {/* Key highlights */}
+              <div className="flex flex-wrap gap-2">
+                {["Freehold", "Direct Mall Link", "Sky Pool 118m", "67 Storeys", "Fully Furnished"].map((tag) => (
+                  <span key={tag} className="feature-tag text-[11px]">{tag}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* Stats grid */}
+            <div ref={statsRef} className="glow-card rounded-3xl p-6">
+              <div className="text-[10px] uppercase tracking-[0.3em] text-white/55 mb-5 font-semibold">Project Highlights</div>
+              <div className="grid grid-cols-3 gap-x-4 gap-y-6">
+                {facts.map((f, i) => (
+                  <StatItem key={f.label} {...f} delay={0.08 * i} />
+                ))}
+              </div>
+            </div>
+
+            {/* Map CTA */}
+            <motion.a
+              href="https://maps.google.com/?q=75A+Jalan+Raja+Chulan+Kuala+Lumpur"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="glow-card rounded-2xl p-4 flex items-center gap-4 cursor-pointer group"
+            >
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#c9a84c]/20 to-[#c9a84c]/5 border border-[#c9a84c]/25 flex items-center justify-center flex-shrink-0 group-hover:border-[#ffd700]/45 group-hover:shadow-[0_0_20px_rgba(255,215,0,0.15)] transition-all duration-300">
+                <MapPin className="w-6 h-6 text-[#c9a84c]" />
+              </div>
+              <div className="flex-1">
+                <div className="text-white font-semibold text-sm group-hover:text-[#f0d070] transition-colors">75A Jalan Raja Chulan</div>
+                <div className="text-white/62 text-xs">50200 Kuala Lumpur — Tap to open Maps</div>
+              </div>
+              <ArrowRight className="w-5 h-5 text-[#c9a84c]/60 group-hover:text-[#ffd700] group-hover:translate-x-1 transition-all duration-300" />
+            </motion.a>
+
+            {/* View on site CTA */}
+            <div className="flex gap-3">
+              <a href="#contact" className="btn-gold flex-1 text-center rounded-xl py-3.5">
+                <Eye className="w-4 h-4" />Register Interest
+              </a>
+              <a href="#virtual-tour" className="btn-ghost-gold flex-1 text-center rounded-xl py-3.5">
+                <Globe className="w-4 h-4" />Virtual Tour
+              </a>
             </div>
           </motion.div>
-
-          {/* Right: Connection Data */}
-          <div className="lg:col-span-4 h-full flex flex-col">
-            <div className="mb-6 shrink-0">
-              <h3 className="text-3xl font-heading font-bold text-white mb-2 leading-tight drop-shadow-xl">
-                Strategically <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-white to-gold animate-gradient-flow">Connected</span>
-              </h3>
-              <div className="h-1.5 w-24 bg-gradient-to-r from-gold to-transparent rounded-full opacity-80" />
-            </div>
-
-            <div className="flex-grow flex flex-col justify-between gap-2">
-              {nearbyPlaces.map((place, i) => (
-                <motion.div
-                  key={place.name}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="flex items-center gap-4 p-3 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-gold/50 hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(196,162,101,0.1)] transition-all duration-300 group cursor-pointer flex-1"
-                >
-                  <div className="p-2.5 rounded-lg bg-[#0e0f1a]/50 border border-white/10 group-hover:border-gold/50 transition-colors shadow-inner shrink-0">
-                    <place.icon className="w-5 h-5 text-white/60 group-hover:text-gold transition-colors" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-sm font-bold text-white group-hover:text-gold transition-colors tracking-wide truncate">{place.name}</div>
-                    <div className="text-[10px] text-white/50 font-mono group-hover:text-white/80 transition-colors truncate">{place.distance}</div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
         </div>
 
+        {/* Slide counter */}
+        <div className="relative z-20 text-center pb-8">
+          <div className="inline-flex items-center gap-2 text-xs text-white/30">
+            <span className="text-[#c9a84c]">{String(current + 1).padStart(2, "0")}</span>
+            <span>/</span>
+            <span>{String(slides.length).padStart(2, "0")}</span>
+          </div>
+        </div>
       </div>
     </section>
   );

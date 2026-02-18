@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
+import SmoothScroll from "@/components/layout/SmoothScroll";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -57,7 +58,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${outfit.variable} antialiased bg-dark-bg text-champagne`}
       >
-        {children}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );
