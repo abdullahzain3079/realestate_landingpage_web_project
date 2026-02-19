@@ -15,7 +15,7 @@ function MarqueeStrip() {
     "CORPORATE SUITES", "FULLY FURNISHED",
   ];
   return (
-    <div className="absolute bottom-32 left-0 w-full z-20 overflow-hidden opacity-30 pointer-events-none mix-blend-overlay">
+    <div className="absolute bottom-32 left-0 w-full z-20 overflow-hidden opacity-30 pointer-events-none mix-blend-overlay hidden sm:block">
       <div className="marquee-track flex whitespace-nowrap gap-16">
         {[...items, ...items].map((item, i) => (
           <span key={i} className="text-[10px] uppercase tracking-[0.4em] text-white/60 font-medium flex items-center gap-8">
@@ -39,17 +39,17 @@ function HeroStats() {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, delay: 2.2, ease: "easeOut" }}
-      className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 pointer-events-auto w-auto"
+      className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-30 pointer-events-auto w-auto max-w-[95vw]"
     >
-      <div className="flex items-center gap-6 sm:gap-10 bg-[#0e0f1a]/80 backdrop-blur-xl px-8 py-4 rounded-full border border-white/10 shadow-2xl hover:border-gold/30 transition-colors duration-500">
+      <div className="flex items-center gap-3 sm:gap-6 md:gap-10 bg-[#0e0f1a]/80 backdrop-blur-xl px-4 sm:px-8 py-3 sm:py-4 rounded-full border border-white/10 shadow-2xl hover:border-gold/30 transition-colors duration-500">
         {stats.map((stat, i) => (
           <div key={i} className="flex items-center gap-4 group">
-            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-              <stat.icon className="w-3.5 h-3.5 text-gold" />
+            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+              <stat.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold" />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-heading font-bold text-white leading-none group-hover:text-gold transition-colors">{stat.value}</span>
-              <span className="text-[9px] uppercase tracking-widest text-white/50">{stat.label}</span>
+              <span className="text-sm sm:text-lg font-heading font-bold text-white leading-none group-hover:text-gold transition-colors">{stat.value}</span>
+              <span className="text-[8px] sm:text-[9px] uppercase tracking-widest text-white/50">{stat.label}</span>
             </div>
             {i < stats.length - 1 && <div className="w-px h-6 bg-white/10 hidden sm:block" />}
           </div>
@@ -87,7 +87,7 @@ function MagneticButton({ children, href, primary = false }: { children: React.R
       onMouseLeave={handleMouseLeave}
       style={{ x, y }}
       transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
-      className={`relative inline-flex items-center justify-center px-10 py-5 rounded-full overflow-hidden group transition-all duration-500 ${primary
+      className={`relative inline-flex items-center justify-center px-6 py-3 sm:px-10 sm:py-5 rounded-full overflow-hidden group transition-all duration-500 ${primary
         ? "bg-[#0e0f1a]/40 backdrop-blur-xl border border-gold/40 hover:border-gold shadow-[0_0_30px_rgba(0,0,0,0.3)] hover:shadow-[0_0_50px_rgba(196,162,101,0.4)]"
         : "bg-white/5 backdrop-blur-md border border-white/20 hover:border-white/60 hover:bg-white/10 shadow-[0_0_30px_rgba(0,0,0,0.2)]"
         }`}
@@ -149,7 +149,7 @@ export default function Hero() {
       <div className="absolute right-8 top-0 bottom-0 w-px bg-white/5 z-20 hidden xl:block" />
 
       {/* ▸ Main Content Overlay */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-20 pointer-events-none">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-16 sm:py-20 pointer-events-none">
 
         <motion.div
           style={{ y: textY, opacity: heroOpacity }}
@@ -159,7 +159,7 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl sm:text-6xl md:text-7xl lg:text-[7vw] leading-none font-heading font-bold text-white tracking-tight mb-20 drop-shadow-[0_4px_12px_rgba(0,0,0,1)] whitespace-nowrap"
+            className="text-3xl sm:text-5xl md:text-6xl lg:text-[7vw] leading-none font-heading font-bold text-white tracking-tight mb-8 sm:mb-14 md:mb-20 drop-shadow-[0_4px_12px_rgba(0,0,0,1)]"
           >
             <span className="drop-shadow-[0_0_30px_rgba(0,0,0,0.8)]">PAVILION</span>{" "}
             <motion.span
@@ -185,7 +185,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 1 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-8 pointer-events-auto"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 pointer-events-auto"
           >
             <MagneticButton href="https://www.pavillionsquare.com.my" primary>
               Discover More

@@ -7,20 +7,20 @@ import { Compass, Expand, Minimize, Eye, RotateCcw, ChevronLeft, ChevronRight, M
 
 /* ── BG images for this section ─────────────────────── */
 const bgSlides = [
-  { src: "/page_2_img_1.jpeg", label: "Pavilion Square — Aerial Overview" },
+  { src: "/pavilionmainview.jpeg", label: "Pavilion Square — Aerial Overview" },
   { src: "/page_4_img_2.jpeg", label: "Exterior Architecture" },
   { src: "/page_5_img_2.jpeg", label: "Tower Elevation" },
   { src: "/page_8_img_1.jpeg", label: "Sky Level Views" },
-  { src: "/page_2_img_2.jpeg", label: "Grand Entrance" },
+  { src: "/page_18_img_1.jpeg", label: "Grand Entrance" },
 ];
 
 /* ── Preview thumbnails ──────────────────────────────── */
 const previews = [
   { src: "/page_9_img_1.jpeg", label: "L67 Pool" },
-  { src: "/page_10_img_1.jpeg", label: "L66 Sky Deck" },
+  { src: "/page_10_img_2.jpeg", label: "L66 Sky Deck" },
   { src: "/page_11_img_1.jpeg", label: "L63A Gym" },
-  { src: "/page_15_img_17.jpeg", label: "Studio Interior" },
-  { src: "/page_15_img_21.jpeg", label: "2BR Living" },
+  { src: "/page_15_img_1.jpeg", label: "Studio Interior" },
+  { src: "/page_15_img_4.jpeg", label: "2BR Living" },
   { src: "/page_16_img_1.jpeg", label: "Corporate Suite" },
   { src: "/page_18_img_1.jpeg", label: "Lobby" },
 ];
@@ -70,7 +70,7 @@ export default function VirtualTour() {
       {/* Dot grid overlay */}
       <div className="absolute inset-0 opacity-[0.018]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, rgba(201,168,76,0.8) 1px, transparent 0)", backgroundSize: "48px 48px" }} />
 
-      <div className="relative z-10 min-h-screen max-w-7xl mx-auto w-full px-6 py-28 flex flex-col">
+      <div className="relative z-10 min-h-screen max-w-7xl mx-auto w-full px-4 sm:px-6 py-20 sm:py-28 flex flex-col">
 
         {/* Header */}
         <div className="mb-10">
@@ -95,7 +95,7 @@ export default function VirtualTour() {
           <div className="section-divider mt-4" />
         </div>
 
-        <div className="flex-1 grid lg:grid-cols-5 gap-10 items-start">
+        <div className="flex-1 flex flex-col-reverse lg:grid lg:grid-cols-5 gap-8 lg:gap-10 items-start">
 
           {/* Left — features + controls */}
           <motion.div
@@ -103,7 +103,7 @@ export default function VirtualTour() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-2 flex flex-col gap-6"
+            className="lg:col-span-2 flex flex-col gap-4 sm:gap-6"
           >
             <p className="text-white/65 text-[15px] leading-relaxed">
               Step inside Pavilion Square KL without leaving your home. Our immersive 360° virtual tour lets you explore every floor — from the 118m sky pool to the luxurious residences and corporate suites.

@@ -16,8 +16,8 @@ const levels = [
     tagline: "Highest Rooftop Pool in KL City Centre",
     description:
       "67 storeys above Kuala Lumpur — plunge into the longest rooftop infinity pool in the city. At 118 metres, this sky-high oasis offers breathtaking 360° panoramic views of the KL skyline, surrounded by a sun deck, sky lounge, and private Jacuzzi.",
-    image:   "/page_9_img_1.jpeg",
-    bgImage: "/page_9_img_2.jpeg",
+    image: "/page_9_img_1.jpeg",
+    bgImage: "/page_9_img_1.jpeg",
     stat: "118m",
     statLabel: "Pool Length",
     accent: "#06b6d4",
@@ -31,7 +31,7 @@ const levels = [
     tagline: "Entertainment Above the Clouds",
     description:
       "A curated sky-high sanctuary blending modern sophistication with peaceful retreat. BBQ terraces, private dining, an entertainment lounge — making Level 66 the ultimate destination for gatherings above Kuala Lumpur.",
-    image:   "/page_10_img_1.jpeg",
+    image: "/page_10_img_2.jpeg",
     bgImage: "/page_10_img_2.jpeg",
     stat: "Level 66",
     statLabel: "Sky Deck",
@@ -46,7 +46,7 @@ const levels = [
     tagline: "Largest Sky Gym in KL City Centre",
     description:
       "15,000 sq.ft. of world-class wellness facilities — the highest and most expansive Sky Wellness floor in Kuala Lumpur. World-class gym equipment, yoga studios, sauna & steam rooms, and outdoor fitness decks.",
-    image:   "/page_11_img_1.jpeg",
+    image: "/page_11_img_1.jpeg",
     bgImage: "/page_12_img_1.jpeg",
     stat: "15,000",
     statLabel: "sq.ft. Wellness",
@@ -61,7 +61,7 @@ const levels = [
     tagline: "A Community at the Heart of It All",
     description:
       "A lushly landscaped 30,000 sq.ft. garden paradise at 12 storeys above street level — featuring a serene walk trail, kids playground, yoga deck, BBQ deck, multi-purpose hall, karaoke, pool table, and a club lounge.",
-    image:   "/page_13_img_1.jpeg",
+    image: "/page_13_img_1.jpeg",
     bgImage: "/page_14_img_1.jpeg",
     stat: "30K sqft",
     statLabel: "Garden Level",
@@ -74,12 +74,12 @@ const levels = [
 /* ── Strip images ────────────────────────────────────── */
 const stripImages = [
   "/page_9_img_1.jpeg",
-  "/page_9_img_4.jpeg",
-  "/page_10_img_1.jpeg",
+  "/page_8_img_1.jpeg",
+  "/page_10_img_2.jpeg",
   "/page_11_img_1.jpeg",
   "/page_12_img_1.jpeg",
   "/page_14_img_1.jpeg",
-  "/page_9_img_2.jpeg",
+  "/page_9_img_1.jpeg",
   "/page_13_img_1.jpeg",
 ];
 
@@ -117,7 +117,7 @@ export default function Facilities() {
       ))}
 
       {/* Content */}
-      <div className="relative z-10 min-h-screen flex flex-col max-w-7xl mx-auto w-full px-6 py-28">
+      <div className="relative z-10 min-h-screen flex flex-col max-w-7xl mx-auto w-full px-4 sm:px-6 py-20 sm:py-28">
 
         {/* Section heading */}
         <div className="mb-10">
@@ -135,7 +135,7 @@ export default function Facilities() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white leading-tight"
           >
             Sky-High <em style={{ fontStyle: "normal", WebkitTextFillColor: "transparent", background: "linear-gradient(135deg,#c9a84c,#ffd700)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>Facilities</em>
             <br />Like No Other
@@ -165,7 +165,7 @@ export default function Facilities() {
         </div>
 
         {/* Main content area */}
-        <div className="flex-1 grid lg:grid-cols-5 gap-8 items-start">
+        <div className="flex-1 grid lg:grid-cols-5 gap-6 lg:gap-8 items-start">
 
           {/* Left — details */}
           <div className="lg:col-span-3">
@@ -223,7 +223,7 @@ export default function Facilities() {
           </div>
 
           {/* Right — image + level nav */}
-          <div className="lg:col-span-2 flex flex-col gap-4">
+          <div className="lg:col-span-2 flex flex-col gap-3 sm:gap-4 order-first lg:order-last">
             {/* Main image */}
             <AnimatePresence mode="wait">
               <motion.div
@@ -252,7 +252,7 @@ export default function Facilities() {
                 <button
                   key={l.id}
                   onClick={() => selectLevel(i)}
-                  className={`relative overflow-hidden rounded-2xl p-3.5 text-left transition-all duration-400 border ${i === activeIdx
+                  className={`relative overflow-hidden rounded-2xl p-2.5 sm:p-3.5 text-left transition-all duration-400 border ${i === activeIdx
                     ? "border-[#c9a84c]/45 bg-gradient-to-br from-[#c9a84c]/15 to-[#c9a84c]/5 shadow-[0_0_20px_rgba(201,168,76,0.1)]"
                     : "border-white/8 bg-white/5 hover:border-white/20 hover:bg-white/8"}`}
                 >
@@ -277,7 +277,7 @@ export default function Facilities() {
         <div className="mt-10 overflow-hidden">
           <div className="flex gap-3" style={{ animation: "marquee 35s linear infinite", width: "max-content" }}>
             {[...stripImages, ...stripImages].map((src, i) => (
-              <div key={i} className="w-32 h-20 rounded-xl overflow-hidden flex-shrink-0 border border-white/10 img-card-hover">
+              <div key={i} className="w-24 h-16 sm:w-32 sm:h-20 rounded-xl overflow-hidden flex-shrink-0 border border-white/10 img-card-hover">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={src} alt="" className="w-full h-full object-cover" />
               </div>

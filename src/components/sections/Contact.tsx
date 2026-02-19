@@ -10,16 +10,16 @@ import {
 
 /* ── Gallery images ──────────────────────────────────── */
 const gallery = [
-  "/page_2_img_1.jpeg",
+  "/pavilionmainview.jpeg",
   "/page_4_img_1.jpeg",
   "/page_9_img_1.jpeg",
-  "/page_9_img_2.jpeg",
-  "/page_10_img_1.jpeg",
+  "/page_8_img_1.jpeg",
+  "/page_10_img_2.jpeg",
   "/page_11_img_1.jpeg",
   "/page_12_img_1.jpeg",
   "/page_13_img_1.jpeg",
-  "/page_15_img_17.jpeg",
-  "/page_15_img_21.jpeg",
+  "/page_15_img_1.jpeg",
+  "/page_15_img_4.jpeg",
   "/page_16_img_1.jpeg",
   "/page_17_img_1.jpeg",
   "/page_18_img_1.jpeg",
@@ -162,7 +162,7 @@ export default function Contact() {
     <section id="contact" className="relative overflow-hidden bg-[#060914]">
 
       {/* ── GALLERY HERO ──────────────────────────────── */}
-      <div className="relative h-[55vh] min-h-[360px] overflow-hidden">
+      <div className="relative h-[40vh] sm:h-[55vh] overflow-hidden">
         {gallery.map((src, i) => (
           <motion.div key={i} className="absolute inset-0" animate={{ opacity: i === galIdx ? 1 : 0 }} transition={{ duration: 1.4 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -186,7 +186,7 @@ export default function Contact() {
           <motion.div initial={{ opacity: 0, y: -15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="section-badge mb-4">
             <Mail className="w-3 h-3" />Get In Touch
           </motion.div>
-          <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="text-4xl md:text-6xl font-heading font-black text-white">
+          <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white leading-tight">
             Register Your <em style={{ fontStyle: "normal", WebkitTextFillColor: "transparent", background: "linear-gradient(135deg,#c9a84c,#ffd700)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>Interest</em>
           </motion.h2>
         </div>
@@ -194,7 +194,7 @@ export default function Contact() {
 
       {/* ── CONTENT ───────────────────────────────────── */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-14 pb-0">
-        <div className="grid lg:grid-cols-5 gap-12">
+        <div className="flex-1 grid lg:grid-cols-5 gap-8 sm:gap-12">
 
           {/* Left — contact info */}
           <motion.div
@@ -410,7 +410,7 @@ export default function Contact() {
       <footer className="relative mt-20">
         <div className="h-px bg-gradient-to-r from-transparent via-[#c9a84c]/40 to-transparent mb-0" />
         <div className="bg-[#030611]">
-          <div className="max-w-7xl mx-auto px-6 py-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 pt-8 sm:pt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
             {/* Brand */}
             <div className="lg:col-span-2 flex flex-col gap-4">

@@ -10,8 +10,8 @@ const residentialUnits = [
     type: "Type A", label: "Studio",
     sqft: 504, sqm: 46.8, beds: 0, baths: 1,
     floors: "L13A–37 & L39–62",
-    image: "/page_15_img_17.jpeg",
-    bgImage: "/page_15_img_17.jpeg",
+    image: "/page_15_img_1.jpeg",
+    bgImage: "/page_15_img_1.jpeg",
     price: "From RM 800K",
     features: ["Open-plan layout", "Premium finishes", "City view", "Fully furnished"],
     highlight: false,
@@ -20,8 +20,8 @@ const residentialUnits = [
     type: "Type B1", label: "1 Bedroom",
     sqft: 614, sqm: 57.0, beds: 1, baths: 1,
     floors: "L13A–62",
-    image: "/page_15_img_19.jpeg",
-    bgImage: "/page_15_img_19.jpeg",
+    image: "/page_15_img_2.jpeg",
+    bgImage: "/page_15_img_2.jpeg",
     price: "From RM 980K",
     features: ["Separate bedroom", "Balcony", "Designer kitchen", "Fully furnished"],
     highlight: false,
@@ -30,8 +30,8 @@ const residentialUnits = [
     type: "Type B2", label: "1 Bedroom",
     sqft: 678, sqm: 63.0, beds: 1, baths: 1,
     floors: "L13A–62",
-    image: "/page_15_img_20.jpeg",
-    bgImage: "/page_15_img_20.jpeg",
+    image: "/page_15_img_3.jpeg",
+    bgImage: "/page_15_img_3.jpeg",
     price: "From RM 1.1M",
     features: ["Generous living area", "Wraparound views", "Luxury bathroom", "Fully furnished"],
     highlight: false,
@@ -40,8 +40,8 @@ const residentialUnits = [
     type: "Type C1", label: "2 Bedrooms",
     sqft: 872, sqm: 81.0, beds: 2, baths: 2,
     floors: "L13A–62",
-    image: "/page_15_img_21.jpeg",
-    bgImage: "/page_15_img_21.jpeg",
+    image: "/page_15_img_4.jpeg",
+    bgImage: "/page_15_img_4.jpeg",
     price: "From RM 1.4M",
     features: ["Dual master", "Full kitchen", "Entertainment area", "Fully furnished"],
     highlight: true,
@@ -50,8 +50,8 @@ const residentialUnits = [
     type: "Type C2", label: "2 Bedrooms",
     sqft: 958, sqm: 89.0, beds: 2, baths: 2,
     floors: "L13A–62",
-    image: "/page_15_img_22.jpeg",
-    bgImage: "/page_15_img_22.jpeg",
+    image: "/page_15_img_5.jpeg",
+    bgImage: "/page_15_img_5.jpeg",
     price: "From RM 1.55M",
     features: ["Corner unit", "Panoramic views", "Double vanity", "Fully furnished"],
     highlight: false,
@@ -60,8 +60,8 @@ const residentialUnits = [
     type: "Type C3", label: "2 Bedrooms",
     sqft: 1023, sqm: 95.0, beds: 2, baths: 2,
     floors: "L13A–62",
-    image: "/page_15_img_23.jpeg",
-    bgImage: "/page_15_img_23.jpeg",
+    image: "/page_15_img_1.jpeg",
+    bgImage: "/page_15_img_1.jpeg",
     price: "From RM 1.65M",
     features: ["Premium floor level", "Extended balcony", "High-spec fit-out", "Fully furnished"],
     highlight: false,
@@ -70,8 +70,8 @@ const residentialUnits = [
     type: "Type C4", label: "2 Bedrooms",
     sqft: 1131, sqm: 105.1, beds: 2, baths: 2,
     floors: "L13A–62",
-    image: "/page_15_img_17.jpeg",
-    bgImage: "/page_15_img_17.jpeg",
+    image: "/page_15_img_2.jpeg",
+    bgImage: "/page_15_img_2.jpeg",
     price: "From RM 1.8M",
     features: ["Dual-aspect view", "Walk-in wardrobe", "Luxury bathtub", "Fully furnished"],
     highlight: false,
@@ -80,8 +80,8 @@ const residentialUnits = [
     type: "Type D", label: "3 Bedrooms",
     sqft: 1272, sqm: 118.2, beds: 3, baths: 3,
     floors: "L13A–62",
-    image: "/page_15_img_21.jpeg",
-    bgImage: "/page_15_img_21.jpeg",
+    image: "/page_15_img_4.jpeg",
+    bgImage: "/page_15_img_4.jpeg",
     price: "From RM 2.1M",
     features: ["Flagship unit", "Sky views all sides", "3 en-suite baths", "Fully furnished"],
     highlight: true,
@@ -247,7 +247,7 @@ export default function UnitLayouts() {
         <UnitBg key={`${tab}-${activeIdx}`} unit={activeUnit} />
       </AnimatePresence>
 
-      <div className="relative z-10 min-h-screen flex flex-col max-w-7xl mx-auto w-full px-6 py-28">
+      <div className="relative z-10 min-h-screen flex flex-col max-w-7xl mx-auto w-full px-4 sm:px-6 py-20 sm:py-28">
 
         {/* Header */}
         <div className="mb-8">
@@ -266,7 +266,7 @@ export default function UnitLayouts() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="text-4xl md:text-5xl font-heading font-black text-white leading-tight"
+              className="text-3xl sm:text-4xl md:text-5xl font-heading font-black text-white leading-tight"
             >
               Unit <em style={{ fontStyle: "normal", WebkitTextFillColor: "transparent", background: "linear-gradient(135deg,#c9a84c,#ffd700)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>Layouts</em>
             </motion.h2>
@@ -291,7 +291,7 @@ export default function UnitLayouts() {
         <div className="flex-1 grid lg:grid-cols-5 gap-8">
 
           {/* Unit list — scrollable */}
-          <div className="lg:col-span-2 flex flex-col gap-2 overflow-y-auto max-h-[70vh] pr-1 scrollbar-hide">
+          <div className="lg:col-span-2 flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto lg:max-h-[70vh] pr-0 lg:pr-1 pb-2 lg:pb-0 scrollbar-hide">
             <AnimatePresence mode="popLayout">
               {units.map((u, i) => (
                 <motion.button
@@ -302,7 +302,7 @@ export default function UnitLayouts() {
                   exit={{ opacity: 0, x: -30 }}
                   transition={{ duration: 0.4, delay: i * 0.05 }}
                   onClick={() => select(i)}
-                  className={`group relative text-left p-4 rounded-2xl border transition-all duration-400 ${i === activeIdx
+                  className={`group relative text-left p-3 sm:p-4 rounded-2xl border transition-all duration-400 min-w-[200px] lg:min-w-0 flex-shrink-0 lg:flex-shrink ${i === activeIdx
                     ? "border-[#c9a84c]/40 bg-gradient-to-r from-[#c9a84c]/12 to-[#c9a84c]/4 shadow-[0_0_24px_rgba(201,168,76,0.08)]"
                     : "border-white/8 bg-white/5 hover:border-white/18 hover:bg-white/8"}`}
                 >
@@ -344,7 +344,7 @@ export default function UnitLayouts() {
               className="lg:col-span-3 flex flex-col gap-4"
             >
               {/* Image card */}
-              <div className="relative aspect-[16/10] rounded-3xl overflow-hidden border border-white/10 group img-card-hover">
+              <div className="relative aspect-[4/3] sm:aspect-[16/10] rounded-3xl overflow-hidden border border-white/10 group img-card-hover">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={activeUnit.image} alt={activeUnit.label} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#060914]/80 via-[#060914]/20 to-transparent" />
@@ -372,14 +372,14 @@ export default function UnitLayouts() {
                 {/* View button */}
                 <button
                   onClick={() => setModalUnit(activeUnit)}
-                  className="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 rounded-xl bg-[#060914]/60 backdrop-blur-md border border-white/20 text-white/80 text-xs font-semibold hover:border-[#c9a84c]/50 hover:text-[#c9a84c] transition-all duration-300 opacity-0 group-hover:opacity-100"
+                  className="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 rounded-xl bg-[#060914]/60 backdrop-blur-md border border-white/20 text-white/80 text-xs font-semibold hover:border-[#c9a84c]/50 hover:text-[#c9a84c] transition-all duration-300 lg:opacity-0 lg:group-hover:opacity-100"
                 >
                   <Eye className="w-3.5 h-3.5" /> View Details
                 </button>
               </div>
 
               {/* Quick info row */}
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {[
                   { icon: Maximize2, label: "Size", val: `${activeUnit.sqft} sqft` },
                   { icon: BedDouble, label: "Bedrooms", val: activeUnit.beds > 0 ? String(activeUnit.beds) : "—" },

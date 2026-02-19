@@ -8,12 +8,12 @@ import {
 } from "lucide-react";
 
 const bgSlides = [
-  { src: "/page_18_img_1.jpeg",  label: "Grand Entrance Lobby" },
-  { src: "/page_9_img_1.jpeg",   label: "L67 Infinity Sky Pool" },
-  { src: "/page_10_img_1.jpeg",  label: "L66 Sky Garden & Lounge" },
-  { src: "/page_4_img_3.jpeg",   label: "Facade - Jalan Bukit Bintang" },
-  { src: "/page_15_img_25.jpeg", label: "Residence Interior" },
-  { src: "/page_15_img_23.jpeg", label: "Premium Suite" },
+  { src: "/page_18_img_1.jpeg", label: "Grand Entrance Lobby" },
+  { src: "/page_9_img_1.jpeg", label: "L67 Infinity Sky Pool" },
+  { src: "/page_10_img_2.jpeg", label: "L66 Sky Garden & Lounge" },
+  { src: "/page_4_img_3.jpeg", label: "Facade - Jalan Bukit Bintang" },
+  { src: "/page_15_img_3.jpeg", label: "Residence Interior" },
+  { src: "/page_15_img_5.jpeg", label: "Premium Suite" },
 ];
 
 // OFFICIAL CONCIERGE SERVICES from Quick Fact for PSQ.docx
@@ -45,32 +45,32 @@ const officialServices = [
 ];
 
 const extraServices = [
-  { icon: ConciergeBell, title: "24/7 Concierge Desk",   desc: "Round-the-clock personal concierge - restaurant reservations, event tickets and exclusive access." },
-  { icon: Shield,        title: "Multi-Tier Security",   desc: "Advanced CCTV, card-access and on-site security personnel providing absolute resident safety." },
-  { icon: Home,          title: "Fully Furnished Units", desc: "Every residence and corporate suite delivered exclusively fully furnished - move in from day one." },
-  { icon: Car,           title: "Valet & Drop-off",      desc: "Designer drop-off portico with dedicated valet parking for residents and guests." },
-  { icon: Eye,           title: "Private Viewings",      desc: "After-hours showflat viewings arranged by appointment through the dedicated concierge team." },
-  { icon: Star,          title: "Pavilion KL Link",      desc: "Pedestrian link bridge to Pavilion KL - 450+ retail, dining and entertainment options." },
+  { icon: ConciergeBell, title: "24/7 Concierge Desk", desc: "Round-the-clock personal concierge - restaurant reservations, event tickets and exclusive access." },
+  { icon: Shield, title: "Multi-Tier Security", desc: "Advanced CCTV, card-access and on-site security personnel providing absolute resident safety." },
+  { icon: Home, title: "Fully Furnished Units", desc: "Every residence and corporate suite delivered exclusively fully furnished - move in from day one." },
+  { icon: Car, title: "Valet & Drop-off", desc: "Designer drop-off portico with dedicated valet parking for residents and guests." },
+  { icon: Eye, title: "Private Viewings", desc: "After-hours showflat viewings arranged by appointment through the dedicated concierge team." },
+  { icon: Star, title: "Pavilion KL Link", desc: "Pedestrian link bridge to Pavilion KL - 450+ retail, dining and entertainment options." },
 ];
 
 // Project facts verified from Quick Fact for PSQ.docx
 const projectFacts = [
-  { label: "Developer",   value: "Armani Hartajaya Sdn Bhd", sub: "Under Pavilion Group" },
-  { label: "Tenure",      value: "Leasehold 2122",            sub: "Fully secure holding" },
-  { label: "Completion",  value: "Year 2030",                 sub: "58 months from SPA" },
-  { label: "Title",       value: "Commercial HDA",            sub: "Serviced Residence" },
+  { label: "Developer", value: "Armani Hartajaya Sdn Bhd", sub: "Under Pavilion Group" },
+  { label: "Tenure", value: "Leasehold 2122", sub: "Fully secure holding" },
+  { label: "Completion", value: "Year 2030", sub: "58 months from SPA" },
+  { label: "Title", value: "Commercial HDA", sub: "Serviced Residence" },
 ];
 
 const stats = [
-  { value: "960",  label: "Luxury Residences" },
-  { value: "106",  label: "Corporate Suites" },
-  { value: "70K",  label: "sq.ft. Facilities" },
+  { value: "960", label: "Luxury Residences" },
+  { value: "106", label: "Corporate Suites" },
+  { value: "70K", label: "sq.ft. Facilities" },
   { value: "24/7", label: "Concierge" },
 ];
 
 export default function Concierge() {
-  const [current, setCurrent]         = useState(0);
-  const [paused, setPaused]           = useState(false);
+  const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
   const [activeExtra, setActiveExtra] = useState<number | null>(null);
 
   useEffect(() => {
@@ -135,7 +135,7 @@ export default function Concierge() {
         </AnimatePresence>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-6 pt-28 pb-24">
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-20 pb-16 sm:pt-28 sm:pb-24">
 
         {/* Header */}
         <div className="mb-14">
@@ -152,7 +152,7 @@ export default function Concierge() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-4xl md:text-6xl font-heading font-black text-white leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white leading-tight"
           >
             Concierge &amp; <br className="hidden md:block" />
             <span style={{ WebkitTextFillColor: "transparent", background: "linear-gradient(135deg,#c9a84c 0%,#ffd700 50%,#f0d070 100%)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>
@@ -190,7 +190,7 @@ export default function Concierge() {
               transition={{ delay: i * 0.08 }}
               className="glow-card rounded-2xl text-center py-6 px-3"
             >
-              <div className="stat-number text-3xl md:text-4xl font-black mb-1">{s.value}</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold stat-number">{s.value}</div>
               <div className="text-[11px] text-white/60 uppercase tracking-[0.22em] font-semibold">{s.label}</div>
             </motion.div>
           ))}
@@ -256,7 +256,7 @@ export default function Concierge() {
               <div className="text-[10px] uppercase tracking-[0.35em] text-white/35 font-bold mb-3">
                 Additional Premium Services
               </div>
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
                 {extraServices.map((svc, i) => (
                   <motion.div
                     key={svc.title}

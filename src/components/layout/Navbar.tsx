@@ -54,11 +54,11 @@ export default function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 left-0 right-0 z-[90] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled
-          ? "bg-[#0e0f1a]/80 backdrop-blur-2xl border-b border-white/5 py-4 shadow-2xl shadow-black/20"
-          : "bg-transparent py-6"
+          ? "bg-[#0e0f1a]/80 backdrop-blur-2xl border-b border-white/5 py-3 sm:py-4 shadow-2xl shadow-black/20"
+          : "bg-transparent py-4 sm:py-6"
           }`}
       >
-        <div className="max-w-[1920px] mx-auto px-6 md:px-12 grid grid-cols-[auto_1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center h-16 md:h-20">
+        <div className="max-w-[1920px] mx-auto px-4 sm:px-6 md:px-12 grid grid-cols-[auto_1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center h-14 sm:h-16 md:h-20">
           {/* Logo (Left) */}
           <div className="flex justify-start">
             <Link href="#hero" className="flex items-center gap-4 group relative z-50">
@@ -161,7 +161,7 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0, rotateX: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ delay: i * 0.05, type: "spring", stiffness: 300, damping: 30 }}
-                  className={`text-3xl font-heading font-light tracking-wider hover:text-gold transition-all duration-500 ${activeSection === link.href.replace("#", "") ? "text-gold scale-110 font-medium" : "text-white/50"
+                  className={`text-2xl sm:text-3xl font-heading font-light tracking-wider hover:text-gold transition-all duration-500 ${activeSection === link.href.replace("#", "") ? "text-gold scale-110 font-medium" : "text-white/50"
                     }`}
                 >
                   {link.label}

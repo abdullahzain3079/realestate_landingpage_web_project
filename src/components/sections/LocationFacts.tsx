@@ -132,7 +132,7 @@ export default function LocationFacts() {
 
       {/* Content */}
       <div className="relative z-10 min-h-screen flex flex-col">
-        <div className="flex-1 max-w-7xl mx-auto w-full px-6 pt-28 pb-12 grid lg:grid-cols-2 gap-12 items-center">
+        <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-24 sm:pt-28 pb-8 sm:pb-12 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
 
           {/* LEFT — Hero text + slide info */}
           <div>
@@ -157,7 +157,7 @@ export default function LocationFacts() {
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -40, opacity: 0 }}
                   transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-5xl md:text-6xl lg:text-7xl font-heading font-black text-white leading-[0.9] tracking-tight"
+                  className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-heading font-black text-white leading-[0.9] tracking-tight"
                 >
                   {slides[current].headline.split(" ").map((w, i) =>
                     i === slides[current].headline.split(" ").length - 1 ? (
@@ -215,7 +215,7 @@ export default function LocationFacts() {
                     className={`group flex items-start gap-3 p-3 rounded-xl transition-all duration-300 cursor-default ${item.highlight
                       ? "bg-gradient-to-r from-[#c9a84c]/12 to-transparent border border-[#c9a84c]/20 hover:border-[#ffd700]/35"
                       : "hover:bg-white/5 border border-transparent"
-                    }`}
+                      }`}
                   >
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300 ${item.highlight ? "bg-[#c9a84c]/20 border border-[#c9a84c]/30" : "bg-white/8 border border-white/10"} group-hover:border-[#c9a84c]/40`}>
                       <item.icon className={`w-3.5 h-3.5 ${item.highlight ? "text-[#c9a84c]" : "text-white/50"} group-hover:text-[#c9a84c] transition-colors`} />
@@ -266,7 +266,7 @@ export default function LocationFacts() {
             {/* Stats grid */}
             <div ref={statsRef} className="glow-card rounded-3xl p-6">
               <div className="text-[10px] uppercase tracking-[0.3em] text-white/55 mb-5 font-semibold">Project Highlights</div>
-              <div className="grid grid-cols-3 gap-x-4 gap-y-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-6">
                 {facts.map((f, i) => (
                   <StatItem key={f.label} {...f} delay={0.08 * i} />
                 ))}
