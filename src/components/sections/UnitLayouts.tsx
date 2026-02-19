@@ -162,13 +162,13 @@ function UnitModal({ unit, onClose }: { unit: Unit; onClose: () => void }) {
         exit={{ scale: 0.93, y: 20 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         onClick={(e) => e.stopPropagation()}
-        className="relative z-10 max-w-3xl w-full overflow-hidden rounded-3xl border border-[#c9a84c]/20 bg-gradient-to-br from-[#101840] to-[#0b1030]"
+        className="relative z-10 max-w-3xl w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-[#c9a84c]/20 bg-gradient-to-br from-[#141218] to-[#0e0c12] max-h-[90vh] overflow-y-auto"
       >
         {/* Image */}
-        <div className="relative h-60 overflow-hidden">
+        <div className="relative h-40 sm:h-60 overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={unit.image} alt={unit.label} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#101840] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#141218] via-transparent to-transparent" />
           <button onClick={onClose} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-[#060914]/70 border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/40 transition-all backdrop-blur-sm">
             <X className="w-4 h-4" />
           </button>
@@ -178,8 +178,8 @@ function UnitModal({ unit, onClose }: { unit: Unit; onClose: () => void }) {
           </div>
         </div>
 
-        <div className="p-6">
-          <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="p-4 sm:p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-5 sm:mb-6">
             {[
               { label: "Size", value: `${unit.sqft} sq.ft.`, icon: Maximize2 },
               { label: "Floor", value: unit.floors, icon: Building2 },
@@ -193,23 +193,23 @@ function UnitModal({ unit, onClose }: { unit: Unit; onClose: () => void }) {
             ))}
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-5 sm:mb-6">
             {unit.features.map((f) => (
               <span key={f} className="feature-tag">{f}</span>
             ))}
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
             <a
               href={`https://wa.me/60112880808?text=Hi%2C%20I%27m%20interested%20in%20${encodeURIComponent(unit.type)}%20at%20Pavilion%20Square%20KL`}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-gold flex-1 rounded-xl py-3.5"
+              className="btn-gold flex-1 rounded-xl py-3 sm:py-3.5"
             >
               <MessageSquare className="w-4 h-4" />
               Enquire on WhatsApp
             </a>
-            <a href="#contact" onClick={onClose} className="btn-ghost-gold flex-1 rounded-xl py-3.5">
+            <a href="#contact" onClick={onClose} className="btn-ghost-gold flex-1 rounded-xl py-3 sm:py-3.5">
               Register Interest
             </a>
           </div>
@@ -266,18 +266,18 @@ export default function UnitLayouts() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="text-3xl sm:text-4xl md:text-5xl font-heading font-black text-white leading-tight"
+              className="text-2xl sm:text-4xl md:text-5xl font-heading font-black text-white leading-tight"
             >
               Unit <em style={{ fontStyle: "normal", WebkitTextFillColor: "transparent", background: "linear-gradient(135deg,#c9a84c,#ffd700)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>Layouts</em>
             </motion.h2>
 
             {/* Tab switcher */}
-            <div className="flex gap-1 p-1.5 rounded-2xl bg-white/5 border border-white/10 w-fit">
+            <div className="flex gap-1 p-1 sm:p-1.5 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 w-fit">
               {(["residential", "corporate"] as const).map((t) => (
                 <button
                   key={t}
                   onClick={() => setTab(t)}
-                  className={`relative px-5 py-2 rounded-xl text-xs uppercase tracking-widest font-bold transition-all duration-350 ${tab === t ? "bg-gradient-to-r from-[#c9a84c] to-[#ffd700] text-[#060914] shadow-[0_4px_16px_rgba(201,168,76,0.3)]" : "text-white/50 hover:text-white/80"}`}
+                  className={`relative px-3 sm:px-5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[10px] sm:text-xs uppercase tracking-widest font-bold transition-all duration-350 ${tab === t ? "bg-gradient-to-r from-[#c9a84c] to-[#ffd700] text-[#060914] shadow-[0_4px_16px_rgba(201,168,76,0.3)]" : "text-white/50 hover:text-white/80"}`}
                 >
                   {t === "residential" ? "Luxury Residences" : "Corporate Suites"}
                 </button>
@@ -302,7 +302,7 @@ export default function UnitLayouts() {
                   exit={{ opacity: 0, x: -30 }}
                   transition={{ duration: 0.4, delay: i * 0.05 }}
                   onClick={() => select(i)}
-                  className={`group relative text-left p-3 sm:p-4 rounded-2xl border transition-all duration-400 min-w-[200px] lg:min-w-0 flex-shrink-0 lg:flex-shrink ${i === activeIdx
+                  className={`group relative text-left p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border transition-all duration-400 min-w-[160px] sm:min-w-[200px] lg:min-w-0 flex-shrink-0 lg:flex-shrink ${i === activeIdx
                     ? "border-[#c9a84c]/40 bg-gradient-to-r from-[#c9a84c]/12 to-[#c9a84c]/4 shadow-[0_0_24px_rgba(201,168,76,0.08)]"
                     : "border-white/8 bg-white/5 hover:border-white/18 hover:bg-white/8"}`}
                 >
@@ -344,7 +344,7 @@ export default function UnitLayouts() {
               className="lg:col-span-3 flex flex-col gap-4"
             >
               {/* Image card */}
-              <div className="relative aspect-[4/3] sm:aspect-[16/10] rounded-3xl overflow-hidden border border-white/10 group img-card-hover">
+              <div className="relative aspect-[3/2] sm:aspect-[16/10] rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 group img-card-hover">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={activeUnit.image} alt={activeUnit.label} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#060914]/80 via-[#060914]/20 to-transparent" />
@@ -395,22 +395,22 @@ export default function UnitLayouts() {
               </div>
 
               {/* Features */}
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {activeUnit.features.map((f) => (
                   <span key={f} className="feature-tag">{f}</span>
                 ))}
               </div>
 
               {/* CTAs */}
-              <div className="flex gap-3">
-                <button className="btn-gold flex-1 rounded-xl py-3.5" onClick={() => setModalUnit(activeUnit)}>
+              <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
+                <button className="btn-gold flex-1 rounded-xl py-3 sm:py-3.5" onClick={() => setModalUnit(activeUnit)}>
                   <Eye className="w-4 h-4" />View Floor Plan
                 </button>
                 <a
                   href={`https://wa.me/60112880808?text=I'm%20interested%20in%20${encodeURIComponent(activeUnit.type)}%20at%20Pavilion%20Square`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-ghost-gold flex-1 rounded-xl py-3.5"
+                  className="btn-ghost-gold flex-1 rounded-xl py-3 sm:py-3.5"
                 >
                   <MessageSquare className="w-4 h-4" />WhatsApp
                 </a>

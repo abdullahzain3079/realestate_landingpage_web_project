@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/layout/SmoothScroll";
+import ViewportNormalizer from "@/components/layout/ViewportNormalizer";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -12,6 +13,13 @@ const outfit = Outfit({
   variable: "--font-heading",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#060914",
+};
 
 export const metadata: Metadata = {
   title: "Pavilion Square KL | Luxury Residences & Corporate Suites in Bukit Bintang",
@@ -54,10 +62,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Render-blocking: detect browser zoom + normalize font-size BEFORE any paint */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var d=document.documentElement,w=window.innerWidth,s=screen.availWidth||screen.width,o=window.outerWidth;if(w<=640){d.style.setProperty("font-size","14px","important");return}var m=o>=s-60;if(m){var e=s-20,z=e/w;if(z>1.08&&z<2.5){d.style.zoom=(1/z).toFixed(4);d.style.setProperty("font-size","14px","important");return}}var f=Math.min(14,Math.max(11.5,8+0.003125*w));d.style.setProperty("font-size",f+"px","important")})();`,
+          }}
+        />
+      </head>
       <body
         className={`${inter.variable} ${outfit.variable} antialiased bg-dark-bg text-champagne`}
       >
+        <ViewportNormalizer />
         <SmoothScroll>
           {children}
         </SmoothScroll>

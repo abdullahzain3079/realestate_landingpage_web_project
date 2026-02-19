@@ -36,13 +36,23 @@ export default function Navbar() {
       if (!el) return;
       const observer = new IntersectionObserver(
         ([entry]) => { if (entry.isIntersecting) setActiveSection(sectionId); },
-        { threshold: 0.3, rootMargin: "-80px 0px -40% 0px" }
+        { threshold: 0.2, rootMargin: "-80px 0px -30% 0px" }
       );
       observer.observe(el);
       observers.push(observer);
     });
 
-    return () => observers.forEach((o) => o.disconnect());
+    const handleScrollBottom = () => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 20) {
+        setActiveSection(sections[sections.length - 1]);
+      }
+    };
+    window.addEventListener("scroll", handleScrollBottom);
+
+    return () => {
+      observers.forEach((o) => o.disconnect());
+      window.removeEventListener("scroll", handleScrollBottom);
+    };
   }, []);
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
@@ -54,7 +64,7 @@ export default function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 left-0 right-0 z-[90] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${scrolled
-          ? "bg-[#0e0f1a]/80 backdrop-blur-2xl border-b border-white/5 py-3 sm:py-4 shadow-2xl shadow-black/20"
+          ? "bg-[#0e0c14]/80 backdrop-blur-2xl border-b border-white/5 py-3 sm:py-4 shadow-2xl shadow-black/20"
           : "bg-transparent py-4 sm:py-6"
           }`}
       >
@@ -76,7 +86,7 @@ export default function Navbar() {
 
           {/* Desktop Links (Center) */}
           <div className="hidden lg:flex justify-center">
-            <div className="flex items-center gap-1 bg-[#0e0f1a]/30 rounded-full px-2 py-2 border border-white/10 backdrop-blur-md shadow-2xl shadow-black/20">
+            <div className="flex items-center gap-1 bg-[#0e0c14]/30 rounded-full px-2 py-2 border border-white/10 backdrop-blur-md shadow-2xl shadow-black/20">
               {navLinks.map((link, i) => {
                 const isActive = activeSection === link.href.replace("#", "");
                 const isHovered = hoveredIndex === i;
@@ -85,6 +95,7 @@ export default function Navbar() {
                   <a
                     key={link.href}
                     href={link.href}
+                    onClick={() => setActiveSection(link.href.replace("#", ""))}
                     onMouseEnter={() => setHoveredIndex(i)}
                     onMouseLeave={() => setHoveredIndex(null)}
                     className="relative px-7 py-3 text-[11px] uppercase tracking-[0.25em] font-bold transition-colors duration-500"
@@ -124,8 +135,8 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="hidden md:inline-flex relative group overflow-hidden rounded-full shadow-[0_4px_15px_rgba(196,162,101,0.3)] transition-all duration-300 hover:shadow-[0_6px_20px_rgba(196,162,101,0.5)] hover:-translate-y-0.5"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-[#c4a265] via-[#e8d5a8] to-[#c4a265] bg-[length:200%_auto] animate-shine" />
-              <div className="relative px-8 py-3 flex items-center gap-3 text-dark-bg transition-colors duration-300 text-[11px] uppercase tracking-[0.2em] font-bold">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#c9a84c] via-[#ffd700] to-[#c9a84c] bg-[length:200%_auto] animate-shine" />
+              <div className="relative px-8 py-4 sm:px-10 sm:py-4.5 flex items-center gap-3 text-dark-bg transition-colors duration-300 text-[11px] uppercase tracking-[0.2em] font-bold">
                 <Phone className="w-3.5 h-3.5 fill-dark-bg" />
                 <span>Book Viewing</span>
               </div>
@@ -149,7 +160,7 @@ export default function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[85] bg-[#0e0f1a]/98 backdrop-blur-3xl flex items-center justify-center"
+            className="fixed inset-0 z-[85] bg-[#0e0c14]/98 backdrop-blur-3xl flex items-center justify-center"
           >
             <motion.div className="flex flex-col items-center gap-8">
               {navLinks.map((link, i) => (
@@ -171,7 +182,7 @@ export default function Navbar() {
                 <a
                   href="https://wa.link/9ckvr8"
                   target="_blank"
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-gold rounded-full text-dark-bg text-sm uppercase tracking-widest font-bold shadow-[0_0_30px_rgba(196,162,101,0.3)] hover:shadow-[0_0_50px_rgba(196,162,101,0.5)] transition-shadow duration-500"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#c9a84c] via-[#ffd700] to-[#c9a84c] bg-[length:200%_auto] animate-shine rounded-full text-dark-bg text-sm uppercase tracking-widest font-bold shadow-[0_0_30px_rgba(196,162,101,0.3)] hover:shadow-[0_0_50px_rgba(196,162,101,0.5)] transition-shadow duration-500"
                 >
                   <Phone className="w-4 h-4" />
                   Book Viewing

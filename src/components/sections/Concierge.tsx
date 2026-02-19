@@ -112,7 +112,7 @@ export default function Concierge() {
       />
 
       {/* BG Controls */}
-      <div className="absolute bottom-10 right-6 flex flex-col items-end gap-2 z-20">
+      <div className="absolute bottom-4 sm:bottom-10 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 flex flex-col items-center sm:items-end gap-2 z-20">
         <div className="flex items-center gap-2">
           <button onClick={prev} className="slider-arrow w-9 h-9"><ChevronLeft className="w-3.5 h-3.5" /></button>
           <div className="flex gap-1.5">
@@ -135,7 +135,7 @@ export default function Concierge() {
         </AnimatePresence>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-20 pb-16 sm:pt-28 sm:pb-24">
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-16 pb-12 sm:pt-28 sm:pb-24">
 
         {/* Header */}
         <div className="mb-14">
@@ -152,7 +152,7 @@ export default function Concierge() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white leading-tight"
+            className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white leading-tight"
           >
             Concierge &amp; <br className="hidden md:block" />
             <span style={{ WebkitTextFillColor: "transparent", background: "linear-gradient(135deg,#c9a84c 0%,#ffd700 50%,#f0d070 100%)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>
@@ -179,7 +179,7 @@ export default function Concierge() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-14"
+          className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 mb-10 sm:mb-14"
         >
           {stats.map((s, i) => (
             <motion.div
@@ -188,15 +188,15 @@ export default function Concierge() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="glow-card rounded-2xl text-center py-6 px-3"
+              className="glow-card rounded-xl sm:rounded-2xl text-center py-4 sm:py-6 px-2 sm:px-3"
             >
-              <div className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold stat-number">{s.value}</div>
+              <div className="text-xl sm:text-3xl md:text-4xl font-heading font-bold stat-number">{s.value}</div>
               <div className="text-[11px] text-white/60 uppercase tracking-[0.22em] font-semibold">{s.label}</div>
             </motion.div>
           ))}
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-10">
+        <div className="grid lg:grid-cols-3 gap-6 sm:gap-10">
 
           {/* Official Services + Extra grid */}
           <motion.div
@@ -211,7 +211,7 @@ export default function Concierge() {
             </div>
 
             {/* 3 official cards with glow-card border animation */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3 sm:gap-4">
               {officialServices.map((svc, i) => (
                 <motion.div
                   key={svc.title}
@@ -219,21 +219,21 @@ export default function Concierge() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="glow-card rounded-2xl p-6 flex gap-5 items-start"
+                  className="bg-white/5 border border-[#c9a84c]/30 rounded-xl sm:rounded-2xl p-3 sm:p-6 flex gap-3 sm:gap-5 items-start hover:border-[#c9a84c]/60 hover:bg-white/10 transition-colors duration-300"
                 >
                   <div
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300"
+                    className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300"
                     style={{
                       background: `linear-gradient(135deg, ${svc.glow}, transparent)`,
                       border: `1.5px solid ${svc.color}44`,
                       boxShadow: `0 0 20px ${svc.glow}`,
                     }}
                   >
-                    <svc.icon className="w-7 h-7" style={{ color: svc.color }} />
+                    <svc.icon className="w-5 h-5 sm:w-7 sm:h-7" style={{ color: svc.color }} />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2 flex-wrap">
-                      <span className="text-[15px] font-bold text-white">{svc.title}</span>
+                      <span className="text-[13px] sm:text-[15px] font-bold text-white">{svc.title}</span>
                       <span
                         className="text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-[0.18em]"
                         style={{
@@ -245,7 +245,7 @@ export default function Concierge() {
                         {svc.subtitle}
                       </span>
                     </div>
-                    <p className="text-[13px] text-white/72 leading-relaxed">{svc.desc}</p>
+                    <p className="text-[11px] sm:text-[13px] text-white/72 leading-relaxed">{svc.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -256,7 +256,7 @@ export default function Concierge() {
               <div className="text-[10px] uppercase tracking-[0.35em] text-white/35 font-bold mb-3">
                 Additional Premium Services
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
                 {extraServices.map((svc, i) => (
                   <motion.div
                     key={svc.title}
@@ -266,24 +266,24 @@ export default function Concierge() {
                     transition={{ delay: i * 0.05 }}
                     onMouseEnter={() => setActiveExtra(i)}
                     onMouseLeave={() => setActiveExtra(null)}
-                    className="glow-card glow-card-slow rounded-xl p-4 flex flex-col gap-2.5 cursor-default"
+                    className="bg-white/5 border border-[#c9a84c]/25 rounded-lg sm:rounded-xl p-3 sm:p-4 flex flex-col gap-2 sm:gap-2.5 cursor-default hover:bg-white/10 hover:border-[#c9a84c]/50 transition-all duration-300"
                   >
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300"
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center transition-all duration-300"
                       style={{
-                        background: activeExtra === i ? "rgba(201,168,76,0.18)" : "rgba(201,168,76,0.07)",
-                        border: `1px solid ${activeExtra === i ? "rgba(255,215,0,0.45)" : "rgba(201,168,76,0.2)"}`,
-                        boxShadow: activeExtra === i ? "0 0 14px rgba(255,215,0,0.2)" : "none",
+                        background: activeExtra === i ? "rgba(201,168,76,0.18)" : "rgba(255,255,255,0.05)",
+                        border: `1px solid ${activeExtra === i ? "rgba(201,168,76,0.5)" : "rgba(255,255,255,0.1)"}`,
+                        boxShadow: activeExtra === i ? "0 0 14px rgba(201,168,76,0.25)" : "none",
                       }}
                     >
                       <svc.icon
-                        className="w-5 h-5 transition-colors duration-300"
-                        style={{ color: activeExtra === i ? "#ffd700" : "#c9a84c" }}
+                        className="w-4 h-4 sm:w-5 sm:h-5 transition-colors duration-300"
+                        style={{ color: activeExtra === i ? "#ffd700" : "rgba(255,255,255,0.6)" }}
                       />
                     </div>
                     <div>
-                      <div className="text-[13px] font-bold text-white mb-1 leading-tight">{svc.title}</div>
-                      <div className="text-[11px] text-white/60 leading-relaxed">{svc.desc}</div>
+                      <div className="text-[11px] sm:text-[13px] font-bold text-white mb-1 leading-tight">{svc.title}</div>
+                      <div className="text-[10px] sm:text-[11px] text-white/60 leading-relaxed">{svc.desc}</div>
                     </div>
                   </motion.div>
                 ))}
@@ -300,7 +300,7 @@ export default function Concierge() {
             className="flex flex-col gap-4"
           >
             {/* Project facts */}
-            <div className="glow-card rounded-2xl p-6">
+            <div className="bg-[#0e0c12]/60 border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6">
               <div className="flex items-center gap-2 mb-5">
                 <div className="w-8 h-8 rounded-lg bg-[#c9a84c]/12 border border-[#c9a84c]/25 flex items-center justify-center">
                   <Building2 className="w-4 h-4 text-[#c9a84c]" />
@@ -323,7 +323,7 @@ export default function Concierge() {
             </div>
 
             {/* Highlights */}
-            <div className="glow-card rounded-2xl p-6">
+            <div className="bg-[#0e0c12]/60 border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Star className="w-4 h-4 text-[#c9a84c] fill-[#c9a84c]" />
                 <span className="text-sm font-bold text-white">Why Pavilion Square?</span>
@@ -355,14 +355,14 @@ export default function Concierge() {
               <div className="mt-3 text-[10px] text-white/32"> Pavilion Square Concierge Team</div>
             </div>
 
-            <a href="#contact" className="btn-gold rounded-xl py-4 justify-center w-full">
+            <a href="#contact" className="btn-gold rounded-xl py-3 sm:py-4 justify-center w-full">
               <ConciergeBell className="w-4 h-4" />Register Your Interest
             </a>
             <a
               href="https://wa.link/kgsiw7"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-ghost-gold rounded-xl py-4 justify-center w-full"
+              className="btn-ghost-gold rounded-xl py-3 sm:py-4 justify-center w-full"
             >
               <Anchor className="w-4 h-4" />WhatsApp Enquiry
             </a>

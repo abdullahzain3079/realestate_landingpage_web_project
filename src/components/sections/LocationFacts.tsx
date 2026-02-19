@@ -132,7 +132,7 @@ export default function LocationFacts() {
 
       {/* Content */}
       <div className="relative z-10 min-h-screen flex flex-col">
-        <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-24 sm:pt-28 pb-8 sm:pb-12 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-20 sm:pt-28 pb-8 sm:pb-12 grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
 
           {/* LEFT — Hero text + slide info */}
           <div>
@@ -157,7 +157,7 @@ export default function LocationFacts() {
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -40, opacity: 0 }}
                   transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-heading font-black text-white leading-[0.9] tracking-tight"
+                  className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-heading font-black text-white leading-[0.95] tracking-tight"
                 >
                   {slides[current].headline.split(" ").map((w, i) =>
                     i === slides[current].headline.split(" ").length - 1 ? (
@@ -239,7 +239,7 @@ export default function LocationFacts() {
             className="flex flex-col gap-6"
           >
             {/* Project title card */}
-            <div className="glow-card rounded-3xl p-7">
+            <div className="glow-card rounded-2xl sm:rounded-3xl p-4 sm:p-7">
               <div className="flex items-start justify-between mb-5">
                 <div>
                   <div className="text-[10px] uppercase tracking-[0.35em] text-[#c9a84c]/70 mb-2 font-semibold">Pavilion Group Development</div>
@@ -264,9 +264,9 @@ export default function LocationFacts() {
             </div>
 
             {/* Stats grid */}
-            <div ref={statsRef} className="glow-card rounded-3xl p-6">
-              <div className="text-[10px] uppercase tracking-[0.3em] text-white/55 mb-5 font-semibold">Project Highlights</div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-6">
+            <div ref={statsRef} className="glow-card rounded-2xl sm:rounded-3xl p-4 sm:p-6">
+              <div className="text-[10px] uppercase tracking-[0.3em] text-white/55 mb-4 sm:mb-5 font-semibold">Project Highlights</div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-3 sm:gap-x-4 gap-y-4 sm:gap-y-6">
                 {facts.map((f, i) => (
                   <StatItem key={f.label} {...f} delay={0.08 * i} />
                 ))}
@@ -293,11 +293,11 @@ export default function LocationFacts() {
             </motion.a>
 
             {/* View on site CTA */}
-            <div className="flex gap-3">
-              <a href="#contact" className="btn-gold flex-1 text-center rounded-xl py-3.5">
+            <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
+              <a href="#contact" className="btn-gold flex-1 text-center rounded-xl py-3 sm:py-3.5">
                 <Eye className="w-4 h-4" />Register Interest
               </a>
-              <a href="#virtual-tour" className="btn-ghost-gold flex-1 text-center rounded-xl py-3.5">
+              <a href="#virtual-tour" className="btn-ghost-gold flex-1 text-center rounded-xl py-3 sm:py-3.5">
                 <Globe className="w-4 h-4" />Virtual Tour
               </a>
             </div>

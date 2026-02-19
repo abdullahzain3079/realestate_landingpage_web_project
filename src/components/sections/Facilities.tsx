@@ -111,13 +111,13 @@ export default function Facilities() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={l.bgImage} alt={l.headline} className="w-full h-full object-cover kb-zoom-bg" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#060914]/96 via-[#0b1030]/80 to-[#060914]/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#060914]/96 via-[#0e0c14]/80 to-[#060914]/40" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#060914]/90 via-transparent to-[#060914]/50" />
         </motion.div>
       ))}
 
       {/* Content */}
-      <div className="relative z-10 min-h-screen flex flex-col max-w-7xl mx-auto w-full px-4 sm:px-6 py-20 sm:py-28">
+      <div className="relative z-10 min-h-screen flex flex-col max-w-7xl mx-auto w-full px-4 sm:px-6 py-16 sm:py-28">
 
         {/* Section heading */}
         <div className="mb-10">
@@ -135,7 +135,7 @@ export default function Facilities() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white leading-tight"
+            className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white leading-tight"
           >
             Sky-High <em style={{ fontStyle: "normal", WebkitTextFillColor: "transparent", background: "linear-gradient(135deg,#c9a84c,#ffd700)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>Facilities</em>
             <br />Like No Other
@@ -151,7 +151,7 @@ export default function Facilities() {
         </div>
 
         {/* Level tabs */}
-        <div className="flex gap-1 mb-10 border-b border-white/10 overflow-x-auto scrollbar-hide">
+        <div className="flex gap-1 mb-8 sm:mb-10 border-b border-white/10 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
           {levels.map((l, i) => (
             <button
               key={l.id}
@@ -165,7 +165,7 @@ export default function Facilities() {
         </div>
 
         {/* Main content area */}
-        <div className="flex-1 grid lg:grid-cols-5 gap-6 lg:gap-8 items-start">
+        <div className="flex-1 grid lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 items-start">
 
           {/* Left — details */}
           <div className="lg:col-span-3">
@@ -184,14 +184,14 @@ export default function Facilities() {
                   {active.level}
                 </div>
 
-                <h3 className="text-3xl md:text-4xl font-heading font-black text-white mb-2">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-heading font-black text-white mb-2">
                   {active.headline}
                 </h3>
                 <div className="text-[#c9a84c]/80 text-sm mb-4 font-medium">{active.tagline}</div>
-                <p className="text-white/65 leading-relaxed mb-6 text-[15px]">{active.description}</p>
+                <p className="text-white/65 leading-relaxed mb-4 sm:mb-6 text-sm sm:text-[15px]">{active.description}</p>
 
                 {/* Features grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mb-6">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2.5 mb-4 sm:mb-6">
                   {active.features.map((f) => (
                     <motion.div
                       key={f}
@@ -207,9 +207,9 @@ export default function Facilities() {
                 </div>
 
                 {/* Big stat */}
-                <div className="flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-[#c9a84c]/12 to-transparent border border-[#c9a84c]/20">
+                <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#c9a84c]/12 to-transparent border border-[#c9a84c]/20">
                   <div>
-                    <div className="text-4xl font-heading font-black stat-number leading-none">{active.stat}</div>
+                    <div className="text-2xl sm:text-4xl font-heading font-black stat-number leading-none">{active.stat}</div>
                     <div className="text-xs uppercase tracking-widest text-white/45 mt-1">{active.statLabel}</div>
                   </div>
                   <div className="ml-auto">
@@ -223,7 +223,7 @@ export default function Facilities() {
           </div>
 
           {/* Right — image + level nav */}
-          <div className="lg:col-span-2 flex flex-col gap-3 sm:gap-4 order-first lg:order-last">
+          <div className="lg:col-span-2 flex flex-col gap-2 sm:gap-4 order-first lg:order-last">
             {/* Main image */}
             <AnimatePresence mode="wait">
               <motion.div
@@ -232,7 +232,7 @@ export default function Facilities() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.03 }}
                 transition={{ duration: 0.7 }}
-                className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-white/10 img-card-hover"
+                className="relative aspect-[16/10] sm:aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 img-card-hover"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={active.image} alt={active.headline} className="w-full h-full object-cover" />
@@ -252,7 +252,7 @@ export default function Facilities() {
                 <button
                   key={l.id}
                   onClick={() => selectLevel(i)}
-                  className={`relative overflow-hidden rounded-2xl p-2.5 sm:p-3.5 text-left transition-all duration-400 border ${i === activeIdx
+                  className={`relative overflow-hidden rounded-xl sm:rounded-2xl p-2 sm:p-3.5 text-left transition-all duration-400 border ${i === activeIdx
                     ? "border-[#c9a84c]/45 bg-gradient-to-br from-[#c9a84c]/15 to-[#c9a84c]/5 shadow-[0_0_20px_rgba(201,168,76,0.1)]"
                     : "border-white/8 bg-white/5 hover:border-white/20 hover:bg-white/8"}`}
                 >
@@ -277,7 +277,7 @@ export default function Facilities() {
         <div className="mt-10 overflow-hidden">
           <div className="flex gap-3" style={{ animation: "marquee 35s linear infinite", width: "max-content" }}>
             {[...stripImages, ...stripImages].map((src, i) => (
-              <div key={i} className="w-24 h-16 sm:w-32 sm:h-20 rounded-xl overflow-hidden flex-shrink-0 border border-white/10 img-card-hover">
+              <div key={i} className="w-20 h-14 sm:w-32 sm:h-20 rounded-lg sm:rounded-xl overflow-hidden flex-shrink-0 border border-white/10 img-card-hover">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={src} alt="" className="w-full h-full object-cover" />
               </div>

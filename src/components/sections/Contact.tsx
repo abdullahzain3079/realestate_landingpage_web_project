@@ -114,7 +114,7 @@ function InputField({ label, required, error, children }: { label: string; requi
 }
 
 const inputCls =
-  "w-full bg-[#101840]/70 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#c9a84c]/60 focus:bg-[#101840] focus:shadow-[0_0_0_3px_rgba(201,168,76,0.12)] transition-all duration-200";
+  "w-full bg-[#1a1620]/70 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#c9a84c]/60 focus:bg-[#1a1620] focus:shadow-[0_0_0_3px_rgba(201,168,76,0.12)] transition-all duration-200";
 
 const selectCls = inputCls + " appearance-none cursor-pointer";
 
@@ -162,7 +162,7 @@ export default function Contact() {
     <section id="contact" className="relative overflow-hidden bg-[#060914]">
 
       {/* ── GALLERY HERO ──────────────────────────────── */}
-      <div className="relative h-[40vh] sm:h-[55vh] overflow-hidden">
+      <div className="relative h-[60vh] sm:h-[70vh] overflow-hidden">
         {gallery.map((src, i) => (
           <motion.div key={i} className="absolute inset-0" animate={{ opacity: i === galIdx ? 1 : 0 }} transition={{ duration: 1.4 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -177,7 +177,7 @@ export default function Contact() {
           <button onClick={galPrev} className="slider-arrow"><ChevronLeft className="w-4 h-4" /></button>
           <button onClick={galNext} className="slider-arrow"><ChevronRight className="w-4 h-4" /></button>
         </div>
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+        <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 overflow-x-auto max-w-[90vw] scrollbar-hide px-2 gap-1.5">
           {gallery.map((_, i) => <button key={i} onClick={() => { galPaused.current = true; setGalIdx(i); setTimeout(() => { galPaused.current = false; }, 7000); }} className={`slider-dot ${i === galIdx ? "active" : ""}`} />)}
         </div>
 
@@ -186,15 +186,15 @@ export default function Contact() {
           <motion.div initial={{ opacity: 0, y: -15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="section-badge mb-4">
             <Mail className="w-3 h-3" />Get In Touch
           </motion.div>
-          <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white leading-tight">
+          <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="text-2xl sm:text-3xl md:text-4xl font-heading font-black text-white leading-tight mb-4">
             Register Your <em style={{ fontStyle: "normal", WebkitTextFillColor: "transparent", background: "linear-gradient(135deg,#c9a84c,#ffd700)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>Interest</em>
           </motion.h2>
         </div>
       </div>
 
       {/* ── CONTENT ───────────────────────────────────── */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-14 pb-0">
-        <div className="flex-1 grid lg:grid-cols-5 gap-8 sm:gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-28">
+        <div className="grid lg:grid-cols-5 gap-8 lg:gap-16 items-start">
 
           {/* Left — contact info */}
           <motion.div
@@ -206,7 +206,7 @@ export default function Contact() {
           >
             <div>
               <div className="section-divider mb-5" />
-              <p className="text-white/60 text-[14px] leading-relaxed">
+              <p className="text-white/55 text-sm sm:text-[15px] leading-relaxed mb-6 sm:mb-8">
                 Speak with our dedicated sales consultants to schedule a private viewing at our gallery in the heart of KL City Centre.
               </p>
             </div>
@@ -215,17 +215,17 @@ export default function Contact() {
             <div className="flex flex-col gap-3">
               {contactInfo.map((c) => (
                 <div key={c.label} className="group glow-card glow-card-slow rounded-2xl p-4 flex items-start gap-4">
-                  <div className="w-9 h-9 rounded-xl bg-[#c9a84c]/12 border border-[#c9a84c]/20 flex items-center justify-center flex-shrink-0 group-hover:border-[#c9a84c]/45 group-hover:shadow-[0_0_12px_rgba(201,168,76,0.15)] transition-all duration-300">
-                    <c.icon className="w-4 h-4 text-[#c9a84c]" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#c9a84c]/15 to-transparent border border-[#c9a84c]/20 flex items-center justify-center flex-shrink-0">
+                    <c.icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#c9a84c]" />
                   </div>
                   <div>
-                    <div className="text-[10px] uppercase tracking-[0.2em] text-white/50 mb-0.5 font-semibold">{c.label}</div>
+                    <div className="text-xs sm:text-sm font-bold text-white group-hover:text-[#c9a84c] transition-colors">{c.label}</div>
                     {c.href ? (
-                      <a href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="text-[13px] text-white/75 hover:text-[#ffd700] transition-colors duration-200">
+                      <a href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="text-[11px] sm:text-xs text-white/50 hover:text-[#ffd700] transition-colors duration-200">
                         {c.value}
                       </a>
                     ) : (
-                      <div className="text-[13px] text-white/75">{c.value}</div>
+                      <div className="text-[11px] sm:text-xs text-white/50">{c.value}</div>
                     )}
                   </div>
                 </div>
@@ -235,16 +235,16 @@ export default function Contact() {
             {/* Socials */}
             <div>
               <div className="text-[10px] uppercase tracking-[0.3em] text-white/25 mb-3 font-semibold">Follow Us</div>
-              <div className="flex gap-3">
+              <div className="flex gap-2 sm:gap-3">
                 {socials.map((s) => (
                   <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-                    className="group w-10 h-10 rounded-xl bg-[#101840] border border-white/10 flex items-center justify-center hover:border-[#c9a84c]/50 hover:shadow-[0_0_14px_rgba(201,168,76,0.18)] transition-all duration-300"
+                    className="group w-10 h-10 rounded-xl bg-[#1a1620] border border-white/10 flex items-center justify-center hover:border-[#c9a84c]/50 hover:shadow-[0_0_14px_rgba(201,168,76,0.18)] transition-all duration-300"
                   >
                     <s.icon className="w-4 h-4 text-white/40 group-hover:text-[#c9a84c] transition-colors duration-300" />
                   </a>
                 ))}
                 <a href="https://www.pavillionsquare.com.my" target="_blank" rel="noopener noreferrer"
-                  className="group flex items-center gap-2 px-4 h-10 rounded-xl bg-[#101840] border border-white/10 text-[12px] text-white/40 hover:text-[#c9a84c] hover:border-[#c9a84c]/50 transition-all duration-300">
+                  className="group flex items-center gap-2 px-4 h-10 rounded-xl bg-[#1a1620] border border-white/10 text-[12px] text-white/40 hover:text-[#c9a84c] hover:border-[#c9a84c]/50 transition-all duration-300">
                   <ExternalLink className="w-3.5 h-3.5" />Official Site
                 </a>
               </div>
@@ -297,7 +297,7 @@ export default function Contact() {
                 >
                   <div className="text-[10px] uppercase tracking-[0.3em] text-[#c9a84c]/70 font-semibold mb-1">Registration Form</div>
 
-                  <div className="grid sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                     <InputField label="Salutation">
                       <select value={form.salutation} onChange={(e) => set("salutation", e.target.value)} className={selectCls}>
                         {["Mr", "Ms", "Mrs", "Dr", "Dato", "Tan Sri"].map((s) => <option key={s} value={s}>{s}</option>)}
@@ -332,7 +332,7 @@ export default function Contact() {
                     <div className="flex gap-2">
                       {["Residential", "Corporate", "Both"].map((t) => (
                         <button key={t} type="button" onClick={() => set("propertyType", t)}
-                          className={`flex-1 py-2.5 rounded-xl text-[12px] font-semibold border transition-all duration-200 ${form.propertyType === t ? "bg-gradient-to-r from-[#c9a84c] to-[#b8963a] border-[#c9a84c] text-[#060914] shadow-[0_0_18px_rgba(201,168,76,0.3)]" : "bg-[#101840]/60 border-white/10 text-white/50 hover:border-[#c9a84c]/30 hover:text-white/70"}`}
+                          className={`flex-1 py-2.5 rounded-xl text-[12px] font-semibold border transition-all duration-200 ${form.propertyType === t ? "bg-gradient-to-r from-[#c9a84c] to-[#b8963a] border-[#c9a84c] text-[#060914] shadow-[0_0_18px_rgba(201,168,76,0.3)]" : "bg-[#1a1620]/60 border-white/10 text-white/50 hover:border-[#c9a84c]/30 hover:text-white/70"}`}
                         >{t}</button>
                       ))}
                     </div>
@@ -371,7 +371,7 @@ export default function Contact() {
                   </InputField>
 
                   {/* PDPA consent */}
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-3 sm:gap-4 group">
                     <button
                       type="button"
                       onClick={() => set("pdpa", !form.pdpa)}
@@ -388,7 +388,7 @@ export default function Contact() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="btn-gold rounded-xl py-4 justify-center mt-1 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="btn-gold w-full rounded-xl py-3 sm:py-4 text-center mt-1 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {submitting ? (
                       <>
@@ -418,20 +418,20 @@ export default function Contact() {
                 <span className="text-white">PAVILION</span>{" "}
                 <span style={{ WebkitTextFillColor: "transparent", background: "linear-gradient(135deg,#c9a84c,#ffd700)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>SQUARE</span>
               </div>
-              <div className="text-[11px] uppercase tracking-[0.2em] text-white/25 font-semibold">Kuala Lumpur • Malaysia</div>
-              <p className="text-[13px] text-white/40 leading-relaxed max-w-xs">
+              <div className="text-[11px] uppercase tracking-[0.2em] text-white/60 font-semibold">Kuala Lumpur • Malaysia</div>
+              <p className="text-[13px] text-white/80 leading-relaxed max-w-xs">
                 A landmark dual-tower mixed-use development by YNH Property Berhad, rising 62 floors above the heart of KLCC Precinct. Residences from RM 800K.
               </p>
-              <div className="text-[11px] text-white/20">Developer: YNH Property Berhad</div>
+              <div className="text-[11px] text-white/50">Developer: YNH Property Berhad</div>
             </div>
 
             {/* Quick links */}
             <div>
-              <div className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-semibold mb-4">Quick Links</div>
+              <div className="text-[10px] uppercase tracking-[0.3em] text-white/70 font-semibold mb-4">Quick Links</div>
               <ul className="flex flex-col gap-2">
                 {quickLinks.map((l) => (
                   <li key={l.label}>
-                    <a href={l.href} className="text-[13px] text-white/40 hover:text-[#c9a84c] transition-colors duration-200 hover-underline-gold">
+                    <a href={l.href} className="text-[13px] text-white/90 hover:text-[#c9a84c] transition-colors duration-200 hover-underline-gold">
                       {l.label}
                     </a>
                   </li>
@@ -441,15 +441,15 @@ export default function Contact() {
 
             {/* Contact mini */}
             <div>
-              <div className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-semibold mb-4">Contact Us</div>
+              <div className="text-[10px] uppercase tracking-[0.3em] text-white/70 font-semibold mb-4">Contact Us</div>
               <div className="flex flex-col gap-3">
-                <a href="tel:+60323328808" className="flex items-center gap-2 text-[13px] text-white/40 hover:text-[#c9a84c] transition-colors">
+                <a href="tel:+60323328808" className="flex items-center gap-2 text-[13px] text-white/90 hover:text-[#c9a84c] transition-colors">
                   <Phone className="w-3.5 h-3.5" />+603 2332 8808
                 </a>
-                <a href="https://wa.link/kgsiw7" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[13px] text-white/40 hover:text-[#c9a84c] transition-colors">
+                <a href="https://wa.link/kgsiw7" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[13px] text-white/90 hover:text-[#c9a84c] transition-colors">
                   <MessageSquare className="w-3.5 h-3.5" />+6011 2880 8088
                 </a>
-                <div className="flex items-start gap-2 text-[12px] text-white/30">
+                <div className="flex items-start gap-2 text-[12px] text-white/80">
                   <MapPin className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
                   <span>Jalan Raja Chulan, 50200 Kuala Lumpur</span>
                 </div>
@@ -458,7 +458,7 @@ export default function Contact() {
                     <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
                       className="w-8 h-8 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center hover:border-[#c9a84c]/40 hover:bg-[#c9a84c]/8 transition-all duration-200"
                     >
-                      <s.icon className="w-3.5 h-3.5 text-white/30 hover:text-[#c9a84c]" />
+                      <s.icon className="w-3.5 h-3.5 text-white/70 hover:text-[#c9a84c]" />
                     </a>
                   ))}
                 </div>
@@ -468,10 +468,10 @@ export default function Contact() {
 
           {/* Bottom bar */}
           <div className="border-t border-white/5 px-6 py-5 max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
-            <div className="text-[11px] text-white/20">
+            <div className="text-[11px] text-white/50">
               © {new Date().getFullYear()} YNH Property Berhad. All rights reserved. Registration No.: 197701003905 (34592-A).
             </div>
-            <div className="text-[11px] text-white/15 text-center sm:text-right max-w-sm">
+            <div className="text-[11px] text-white/40 text-center sm:text-right max-w-sm">
               Renders and information are indicative only. All data subject to change without notice. PDPA 2010 compliant.
             </div>
           </div>

@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform, useMotionTemplate, useMotionValue } from "framer-motion";
 import { useRef, useState, MouseEvent } from "react";
 import Link from "next/link";
-import { Building2, Gem, MapPin, ArrowRight, Star, ArrowUpRight } from "lucide-react";
+import { Building2, Gem, MapPin, ArrowRight, ArrowDown, Star, ArrowUpRight } from "lucide-react";
 
 const PANO_VIEWER_URL = "/pano-viewer.html";
 
@@ -39,17 +39,17 @@ function HeroStats() {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, delay: 2.2, ease: "easeOut" }}
-      className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-30 pointer-events-auto w-auto max-w-[95vw]"
+      className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-30 pointer-events-auto w-[calc(100%-2rem)] sm:w-auto max-w-[95vw]"
     >
-      <div className="flex items-center gap-3 sm:gap-6 md:gap-10 bg-[#0e0f1a]/80 backdrop-blur-xl px-4 sm:px-8 py-3 sm:py-4 rounded-full border border-white/10 shadow-2xl hover:border-gold/30 transition-colors duration-500">
+      <div className="flex items-center justify-center gap-2 sm:gap-6 md:gap-10 bg-[#0e0c14]/80 backdrop-blur-xl px-3 sm:px-8 py-2.5 sm:py-4 rounded-full border border-white/10 shadow-2xl hover:border-gold/30 transition-colors duration-500">
         {stats.map((stat, i) => (
-          <div key={i} className="flex items-center gap-4 group">
-            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-              <stat.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold" />
+          <div key={i} className="flex items-center gap-2 sm:gap-4 group">
+            <div className="w-5 h-5 sm:w-8 sm:h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+              <stat.icon className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-gold" />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm sm:text-lg font-heading font-bold text-white leading-none group-hover:text-gold transition-colors">{stat.value}</span>
-              <span className="text-[8px] sm:text-[9px] uppercase tracking-widest text-white/50">{stat.label}</span>
+              <span className="text-xs sm:text-lg font-heading font-bold text-white leading-none group-hover:text-gold transition-colors">{stat.value}</span>
+              <span className="text-[7px] sm:text-[9px] uppercase tracking-widest text-white/50">{stat.label}</span>
             </div>
             {i < stats.length - 1 && <div className="w-px h-6 bg-white/10 hidden sm:block" />}
           </div>
@@ -87,28 +87,20 @@ function MagneticButton({ children, href, primary = false }: { children: React.R
       onMouseLeave={handleMouseLeave}
       style={{ x, y }}
       transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
-      className={`relative inline-flex items-center justify-center px-6 py-3 sm:px-10 sm:py-5 rounded-full overflow-hidden group transition-all duration-500 ${primary
-        ? "bg-[#0e0f1a]/40 backdrop-blur-xl border border-gold/40 hover:border-gold shadow-[0_0_30px_rgba(0,0,0,0.3)] hover:shadow-[0_0_50px_rgba(196,162,101,0.4)]"
-        : "bg-white/5 backdrop-blur-md border border-white/20 hover:border-white/60 hover:bg-white/10 shadow-[0_0_30px_rgba(0,0,0,0.2)]"
+      className={`relative inline-flex items-center justify-center px-8 py-4 sm:px-12 sm:py-5 rounded-full overflow-hidden group transition-all duration-500 ${primary
+        ? "bg-gradient-to-r from-[#c9a84c] via-[#ffd700] to-[#c9a84c] bg-[length:200%_auto] animate-shine text-[#0e0c12] shadow-[0_0_30px_rgba(196,162,101,0.4)] hover:shadow-[0_0_50px_rgba(196,162,101,0.7)] hover:scale-105 border border-[#ffd700]/50"
+        : "bg-[#0e0c14]/40 backdrop-blur-md border border-white/20 text-white hover:bg-[#0e0c14]/80 hover:border-gold/60 hover:text-gold hover:shadow-[0_0_30px_rgba(196,162,101,0.2)]"
         }`}
     >
-      {/* Liquid Fill Effect for Primary */}
-      {primary && (
-        <div className="absolute inset-0 bg-gold translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]" />
-      )}
-
       {/* Text Container */}
-      <span className={`relative z-10 flex items-center gap-3 text-xs uppercase tracking-[0.25em] font-bold ${primary ? "text-white group-hover:text-dark-bg" : "text-white/90 group-hover:text-white"}`}>
+      <span className={`relative z-10 flex items-center gap-2 sm:gap-3 text-[11px] sm:text-xs uppercase tracking-[0.25em] font-bold`}>
         {children}
         {primary ? (
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
         ) : (
-          <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0" />
+          <ArrowUpRight className="w-4 h-4 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         )}
       </span>
-
-      {/* Gloss Shine */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-20 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
     </motion.a>
   );
 }
@@ -159,7 +151,7 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="text-3xl sm:text-5xl md:text-6xl lg:text-[7vw] leading-none font-heading font-bold text-white tracking-tight mb-8 sm:mb-14 md:mb-20 drop-shadow-[0_4px_12px_rgba(0,0,0,1)]"
+            className="text-2xl sm:text-5xl md:text-6xl lg:text-[7vw] leading-none font-heading font-bold text-white tracking-tight mb-6 sm:mb-14 md:mb-20 drop-shadow-[0_4px_12px_rgba(0,0,0,1)]"
           >
             <span className="drop-shadow-[0_0_30px_rgba(0,0,0,0.8)]">PAVILION</span>{" "}
             <motion.span
@@ -185,9 +177,9 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 1 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 pointer-events-auto"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8 pointer-events-auto"
           >
-            <MagneticButton href="https://www.pavillionsquare.com.my" primary>
+            <MagneticButton href="#units" primary>
               Discover More
             </MagneticButton>
 
