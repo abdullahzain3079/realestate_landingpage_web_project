@@ -1284,9 +1284,32 @@ h6 {
     transform: translateY(-2px);
   }
 
-  /* Reduce glow-card animation intensity for mobile performance */
+  /* Replace heavy rotating border with static subtle gold gradient border + glow for mobile */
   .glow-card::before {
-    animation-duration: 6s;
+    animation: none !important;
+    background: linear-gradient(135deg, rgba(201, 168, 76, 0.6), rgba(201, 168, 76, 0.1), rgba(255, 215, 0, 0.4)) !important;
+  }
+
+  /* Remove backdrop-filter on mobile but keep a modest box-shadow glow */
+  .glow-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: 0 4px 16px -2px rgba(201, 168, 76, 0.15), inset 0 1px 0 rgba(201, 168, 76, 0.1) !important;
+  }
+
+  /* Disable Ken Burns zoom on mobile background images */
+  .kb-zoom-bg {
+    animation: none !important;
+    transform: scale(1.02);
+  }
+
+  /* Reduce button glow animations */
+  .btn-gold {
+    animation: none;
+  }
+
+  .btn-ghost-gold {
+    animation: none;
   }
 
   .img-card-hover:hover {
@@ -1330,13 +1353,13 @@ h6 {
     border-radius: 10px;
   }
 
-  /* Reduce heavy animations on mobile for performance */
-  .kb-zoom-bg {
-    animation-duration: 30s;
-  }
-
   .premium-card:hover {
     transform: translateY(-2px);
+  }
+
+  /* Disable marquee animation on mobile for performance */
+  .marquee-track {
+    animation-duration: 45s;
   }
 }
 

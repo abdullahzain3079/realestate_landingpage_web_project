@@ -98,7 +98,7 @@ export default function Navbar() {
                     onClick={() => setActiveSection(link.href.replace("#", ""))}
                     onMouseEnter={() => setHoveredIndex(i)}
                     onMouseLeave={() => setHoveredIndex(null)}
-                    className="relative px-7 py-3 text-[11px] uppercase tracking-[0.25em] font-bold transition-colors duration-500"
+                    className="relative px-5 py-2.5 text-[11px] uppercase tracking-[0.2em] font-bold transition-colors duration-500"
                   >
                     {/* Floating Pill Background for Active/Hover State */}
                     {isActive && (
@@ -144,10 +144,10 @@ export default function Navbar() {
 
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden w-12 h-12 flex items-center justify-center text-white border border-white/10 rounded-full hover:bg-white/5 transition-colors shadow-lg bg-black/20 backdrop-blur-sm"
+              className="lg:hidden w-12 h-12 flex items-center justify-center text-[#c9a84c] border border-[#c9a84c]/40 rounded-full hover:bg-white/5 transition-all shadow-[0_0_20px_rgba(201,168,76,0.4)] bg-[#0e0c12]/80 backdrop-blur-md"
               aria-label="Toggle menu"
             >
-              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6 drop-shadow-[0_0_8px_rgba(201,168,76,1)]" />}
             </button>
           </div>
         </div>

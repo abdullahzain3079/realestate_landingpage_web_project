@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { BedDouble, Bath, Maximize2, ChevronLeft, ChevronRight, X, ArrowRight, MessageSquare, Building2, Star, Eye } from "lucide-react";
 
 /* ── Unit types ──────────────────────────────────────── */
@@ -135,8 +136,7 @@ function UnitBg({ unit }: { unit: Unit }) {
         transition={{ duration: 1.2, ease: "easeInOut" }}
         className="absolute inset-0"
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={unit.bgImage} alt={unit.label} className="w-full h-full object-cover" />
+        <Image src={unit.bgImage} alt={unit.label} fill sizes="100vw" priority className="object-cover" />
       </motion.div>
       {/* Deep navy overlays */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#060914]/98 via-[#060914]/85 to-[#060914]/40" />
@@ -166,8 +166,7 @@ function UnitModal({ unit, onClose }: { unit: Unit; onClose: () => void }) {
       >
         {/* Image */}
         <div className="relative h-40 sm:h-60 overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={unit.image} alt={unit.label} className="w-full h-full object-cover" />
+          <Image src={unit.image} alt={unit.label} fill sizes="(max-width: 768px) 100vw, 800px" className="object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#141218] via-transparent to-transparent" />
           <button onClick={onClose} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-[#060914]/70 border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/40 transition-all backdrop-blur-sm">
             <X className="w-4 h-4" />
@@ -345,8 +344,7 @@ export default function UnitLayouts() {
             >
               {/* Image card */}
               <div className="relative aspect-[3/2] sm:aspect-[16/10] rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 group img-card-hover">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={activeUnit.image} alt={activeUnit.label} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <Image src={activeUnit.image} alt={activeUnit.label} fill sizes="(max-width: 768px) 100vw, 60vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#060914]/80 via-[#060914]/20 to-transparent" />
 
                 {/* Badges */}

@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import {
   Phone, Mail, MapPin, Clock, Facebook, Instagram, Globe,
   ExternalLink, CheckCircle, ChevronLeft, ChevronRight,
@@ -165,8 +166,7 @@ export default function Contact() {
       <div className="relative h-[60vh] sm:h-[70vh] overflow-hidden">
         {gallery.map((src, i) => (
           <motion.div key={i} className="absolute inset-0" animate={{ opacity: i === galIdx ? 1 : 0 }} transition={{ duration: 1.4 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={src} alt="Pavilion Square" className="w-full h-full object-cover kb-zoom-bg" style={{ filter: "brightness(0.45)" }} />
+            <Image src={src} alt="Pavilion Square" fill sizes="100vw" priority={i === 0} className="object-cover kb-zoom-bg" style={{ filter: "brightness(0.45)" }} />
           </motion.div>
         ))}
         <div className="absolute inset-0 bg-gradient-to-b from-[#060914]/60 via-transparent to-[#060914]" />
@@ -408,9 +408,24 @@ export default function Contact() {
 
       {/* ── FOOTER ────────────────────────────────────── */}
       <footer className="relative mt-20">
-        <div className="h-px bg-gradient-to-r from-transparent via-[#c9a84c]/40 to-transparent mb-0" />
-        <div className="bg-[#030611]">
-          <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 pt-8 sm:pt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="h-px bg-gradient-to-r from-transparent via-[#c9a84c]/40 to-transparent mb-0 relative z-10" />
+        <div className="relative bg-[#030611] overflow-hidden">
+
+          {/* Background Image to replace plain black */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/page_3_img_1.jpeg"
+              alt="Pavilion Square KL"
+              fill
+              sizes="100vw"
+              className="object-cover"
+            />
+            {/* Dark overlays to create contrast for the white text while keeping the beautiful image visible */}
+            <div className="absolute inset-0 bg-[#030611]/50" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#030611] via-transparent to-[#030611]/90" />
+          </div>
+
+          <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-8 sm:pt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
             {/* Brand */}
             <div className="lg:col-span-2 flex flex-col gap-4">

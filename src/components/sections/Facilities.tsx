@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import {
   Waves, Dumbbell, TreePine, Gamepad2, Wind, Sun, Coffee,
   ChevronLeft, ChevronRight, CheckCircle, Flame, Star, Users
@@ -109,8 +110,7 @@ export default function Facilities() {
           animate={{ opacity: i === activeIdx ? 1 : 0 }}
           transition={{ duration: 1.4, ease: "easeInOut" }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={l.bgImage} alt={l.headline} className="w-full h-full object-cover kb-zoom-bg" />
+          <Image src={l.bgImage} alt={l.headline} fill sizes="100vw" priority={i === 0} className="object-cover kb-zoom-bg" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#060914]/96 via-[#0e0c14]/80 to-[#060914]/40" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#060914]/90 via-transparent to-[#060914]/50" />
         </motion.div>
@@ -234,8 +234,7 @@ export default function Facilities() {
                 transition={{ duration: 0.7 }}
                 className="relative aspect-[16/10] sm:aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 img-card-hover"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={active.image} alt={active.headline} className="w-full h-full object-cover" />
+                <Image src={active.image} alt={active.headline} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#060914]/70 via-transparent to-transparent" />
                 <div
                   className="absolute top-4 left-4 text-xs uppercase tracking-widest font-bold px-3 py-1.5 rounded-full"
@@ -275,11 +274,10 @@ export default function Facilities() {
 
         {/* Image strip */}
         <div className="mt-10 overflow-hidden">
-          <div className="flex gap-3" style={{ animation: "marquee 35s linear infinite", width: "max-content" }}>
+          <div className="flex gap-3" style={{ animation: "marquee 35s linear infinite", width: "max-content", willChange: "transform" }}>
             {[...stripImages, ...stripImages].map((src, i) => (
-              <div key={i} className="w-20 h-14 sm:w-32 sm:h-20 rounded-lg sm:rounded-xl overflow-hidden flex-shrink-0 border border-white/10 img-card-hover">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={src} alt="" className="w-full h-full object-cover" />
+              <div key={i} className="relative w-20 h-14 sm:w-32 sm:h-20 rounded-lg sm:rounded-xl overflow-hidden flex-shrink-0 border border-white/10 img-card-hover">
+                <Image src={src} alt="" fill sizes="(max-width: 768px) 80px, 128px" className="object-cover" />
               </div>
             ))}
           </div>

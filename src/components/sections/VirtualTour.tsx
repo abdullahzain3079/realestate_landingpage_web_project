@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useInView as useInViewRIO } from "react-intersection-observer";
 import { Compass, Expand, Minimize, Eye, RotateCcw, ChevronLeft, ChevronRight, MapPin, Navigation, View, Play } from "lucide-react";
 
@@ -41,6 +42,9 @@ export default function VirtualTour() {
 
   const { ref: iframeRef, inView: iframeVisible } = useInViewRIO({ triggerOnce: true, threshold: 0.2 });
 
+  // Track if the Virtual Tour section is visible — pause/unmount iframe when off-screen
+  const { ref: sectionVisRef, inView: sectionVisible } = useInViewRIO({ threshold: 0.05 });
+
   /* Auto-advance bg */
   useEffect(() => {
     if (paused) return;
@@ -50,8 +54,15 @@ export default function VirtualTour() {
 
   const goTo = (i: number) => { setCurrent(i); setPaused(true); setTimeout(() => setPaused(false), 9000); };
 
+  // Reset iframe loaded state when scrolling away so skeleton shows on return
+  useEffect(() => {
+    if (!sectionVisible && iframeLoaded) {
+      setIframeLoaded(false);
+    }
+  }, [sectionVisible, iframeLoaded]);
+
   return (
-    <section id="virtual-tour" className="relative min-h-screen overflow-hidden bg-[#060914]">
+    <section id="virtual-tour" ref={sectionVisRef} className="relative min-h-screen overflow-hidden bg-[#060914]">
 
       {/* BG slider */}
       {bgSlides.map((s, i) => (
@@ -61,8 +72,7 @@ export default function VirtualTour() {
           animate={{ opacity: i === current ? 1 : 0 }}
           transition={{ duration: 1.6, ease: "easeInOut" }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={s.src} alt={s.label} className="w-full h-full object-cover kb-zoom-bg" style={{ filter: "grayscale(30%) brightness(0.5)" }} />
+          <Image src={s.src} alt={s.label} fill sizes="100vw" priority={i === 0} className="object-cover kb-zoom-bg" style={{ filter: "grayscale(30%) brightness(0.5)" }} />
         </motion.div>
       ))}
       {/* Gradient overlay */}
@@ -71,10 +81,10 @@ export default function VirtualTour() {
       {/* Dot grid overlay */}
       <div className="absolute inset-0 opacity-[0.018]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, rgba(201,168,76,0.8) 1px, transparent 0)", backgroundSize: "48px 48px" }} />
 
-      <div className="relative z-10 min-h-screen max-w-7xl mx-auto w-full px-4 sm:px-6 py-16 sm:py-28 flex flex-col">
+      <div className="relative z-10 w-full min-h-screen max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-28 flex flex-col justify-center">
 
         {/* Header */}
-        <div className="mb-10">
+        <div className="mb-6 sm:mb-10 mt-6 sm:mt-0">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -89,14 +99,14 @@ export default function VirtualTour() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-3xl sm:text-4xl md:text-6xl font-heading font-black text-white leading-tight"
+            className="text-[28px] leading-[1.1] sm:text-4xl md:text-6xl font-heading font-black text-white"
           >
             Virtual <em style={{ fontStyle: "normal", WebkitTextFillColor: "transparent", background: "linear-gradient(135deg,#c9a84c,#ffd700)", WebkitBackgroundClip: "text", backgroundClip: "text" }}>Tour</em>
           </motion.h2>
           <div className="section-divider mt-4" />
         </div>
 
-        <div className="flex-1 flex flex-col-reverse lg:grid lg:grid-cols-5 gap-6 lg:gap-10 items-start">
+        <div className="flex-1 flex flex-col-reverse lg:grid lg:grid-cols-5 gap-6 lg:gap-10 items-stretch">
 
           {/* Left — features + controls */}
           <motion.div
@@ -165,27 +175,29 @@ export default function VirtualTour() {
             {/* Iframe container */}
             <div
               ref={iframeRef}
-              className={`relative rounded-2xl sm:rounded-3xl overflow-hidden border border-[#c9a84c]/20 transition-all duration-500 ${isExpanded ? "fixed inset-4 z-[150]" : "aspect-[4/3] sm:aspect-video"}`}
+              className={`relative rounded-2xl sm:rounded-3xl overflow-hidden border border-[#c9a84c]/20 transition-all duration-500 ${isExpanded ? "fixed inset-2 sm:inset-4 z-[150]" : "h-[300px] sm:h-auto sm:aspect-video"}`}
             >
               {/* Start Overlay */}
               {!isStarted && (
                 <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm group cursor-pointer" onClick={() => setIsStarted(true)}>
-                  <div className="absolute inset-0 bg-[url('/pavilionmainview.jpeg')] bg-cover bg-center opacity-40 scale-105 group-hover:scale-110 transition-transform duration-700" />
+                  <div className="absolute inset-0 overflow-hidden">
+                    <Image src="/pavilionmainview.jpeg" alt="Preview" fill sizes="100vw" className="object-cover opacity-40 scale-105 group-hover:scale-110 transition-transform duration-700" />
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/60" />
 
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={(e) => { e.stopPropagation(); setIsStarted(true); }}
-                    className="relative z-30 flex items-center gap-4 px-8 py-4 sm:px-10 sm:py-5 bg-gradient-to-r from-[#c9a84c] via-[#ffd700] to-[#c9a84c] bg-[length:200%_auto] animate-shine rounded-full shadow-[0_0_40px_rgba(196,162,101,0.5)] hover:shadow-[0_0_60px_rgba(196,162,101,0.8)] transition-all duration-500 group-hover:shadow-[0_0_80px_rgba(196,162,101,1)]"
+                    className="relative z-30 flex items-center gap-2.5 sm:gap-4 px-4 py-2.5 sm:px-10 sm:py-5 bg-gradient-to-r from-[#c9a84c] via-[#ffd700] to-[#c9a84c] bg-[length:200%_auto] animate-shine rounded-full shadow-[0_0_40px_rgba(196,162,101,0.5)] hover:shadow-[0_0_60px_rgba(196,162,101,0.8)] transition-all duration-500 group-hover:shadow-[0_0_80px_rgba(196,162,101,1)]"
                   >
-                    <div className="w-10 h-10 rounded-full bg-black/20 flex items-center justify-center backdrop-blur-sm border border-white/20">
-                      <Play className="w-5 h-5 text-white fill-white ml-1" />
+                    <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-black/20 flex items-center justify-center backdrop-blur-sm border border-white/20">
+                      <Play className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white fill-white ml-0.5" />
                     </div>
-                    <span className="text-[#0e0c12] font-heading font-bold uppercase tracking-widest text-sm sm:text-base">Start Virtual Tour</span>
+                    <span className="text-[#0e0c12] font-heading font-bold uppercase tracking-widest text-[11px] sm:text-base">Start Virtual Tour</span>
                   </motion.button>
 
-                  <div className="relative z-30 mt-6 text-white/50 text-xs sm:text-sm tracking-widest uppercase">Click to Explore 360° View</div>
+                  <div className="relative z-30 mt-4 sm:mt-6 text-white/50 text-[10px] sm:text-sm tracking-widest uppercase">Click to Explore 360° View</div>
                 </div>
               )}
 
@@ -202,10 +214,10 @@ export default function VirtualTour() {
                 </div>
               )}
 
-              {isStarted && (
+              {isStarted && sectionVisible && (
                 <iframe
                   src="/pano-viewer.html"
-                  className="w-full h-full border-0"
+                  className="w-full h-full border-0 pointer-events-none sm:pointer-events-auto"
                   allow="fullscreen; vr; xr"
                   onLoad={() => setIframeLoaded(true)}
                   title="Pavilion Square 360° Virtual Tour"
@@ -225,8 +237,8 @@ export default function VirtualTour() {
               {/* Tour indicator */}
               <div className="absolute bottom-3 left-3 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-[11px] text-white/60 backdrop-blur-sm bg-[#060914]/50 px-2 py-1 rounded">
-                  Live 360° View — Click & Drag to Explore
+                <span className="text-[9px] sm:text-[11px] text-white/60 backdrop-blur-sm bg-[#060914]/50 px-2 py-1 rounded">
+                  Live 360° — Drag to Explore
                 </span>
               </div>
             </div>
@@ -235,11 +247,10 @@ export default function VirtualTour() {
             <div>
               <div className="text-[10px] uppercase tracking-[0.3em] text-white/30 mb-3 font-semibold">Gallery Preview</div>
               <div className="overflow-hidden rounded-xl">
-                <div className="flex gap-2" style={{ animation: "marquee 28s linear infinite", width: "max-content" }}>
+                <div className="flex gap-2" style={{ animation: "marquee 28s linear infinite", width: "max-content", willChange: "transform" }}>
                   {[...previews, ...previews].map((p, i) => (
-                    <div key={i} className="relative w-20 sm:w-28 rounded-lg sm:rounded-xl overflow-hidden flex-shrink-0 border border-white/10 img-card-hover group cursor-pointer">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={p.src} alt={p.label} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" style={{ height: "56px" }} />
+                    <div key={i} className="relative w-20 sm:w-28 h-[56px] rounded-lg sm:rounded-xl overflow-hidden flex-shrink-0 border border-white/10 img-card-hover group cursor-pointer">
+                      <Image src={p.src} alt={p.label} fill sizes="(max-width: 768px) 80px, 112px" className="object-cover transition-transform duration-500 group-hover:scale-110" />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#060914]/80 via-transparent to-transparent" />
                       <div className="absolute bottom-1 left-2 text-[8px] text-white/60 font-medium">{p.label}</div>
                     </div>

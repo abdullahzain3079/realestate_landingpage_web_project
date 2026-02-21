@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   Sparkles, Car, Eye, Building2, ConciergeBell, CheckCircle,
   Star, Shield, ChevronLeft, ChevronRight, Anchor, Home,
@@ -94,11 +95,13 @@ export default function Concierge() {
           animate={{ opacity: i === current ? 1 : 0 }}
           transition={{ duration: 2, ease: "easeInOut" }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={s.src}
             alt={s.label}
-            className="w-full h-full object-cover kb-zoom-bg"
+            fill
+            sizes="100vw"
+            priority={i === 0}
+            className="object-cover kb-zoom-bg"
             style={{ filter: "brightness(0.35) saturate(0.8)" }}
           />
         </motion.div>
@@ -135,7 +138,7 @@ export default function Concierge() {
         </AnimatePresence>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-16 pb-12 sm:pt-28 sm:pb-24">
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-16 pb-32 sm:pt-28 sm:pb-32">
 
         {/* Header */}
         <div className="mb-14">

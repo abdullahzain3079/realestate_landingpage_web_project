@@ -1,8 +1,9 @@
 "use client";
 
 import { motion, useScroll, useTransform, useMotionTemplate, useMotionValue } from "framer-motion";
-import { useRef, useState, MouseEvent } from "react";
+import { useRef, useState, useEffect, MouseEvent } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Building2, Gem, MapPin, ArrowRight, ArrowDown, Star, ArrowUpRight } from "lucide-react";
 
 const PANO_VIEWER_URL = "/pano-viewer.html";
@@ -16,7 +17,7 @@ function MarqueeStrip() {
   ];
   return (
     <div className="absolute bottom-32 left-0 w-full z-20 overflow-hidden opacity-30 pointer-events-none mix-blend-overlay hidden sm:block">
-      <div className="marquee-track flex whitespace-nowrap gap-16">
+      <div className="marquee-track flex whitespace-nowrap gap-16" style={{ willChange: "transform" }}>
         {[...items, ...items].map((item, i) => (
           <span key={i} className="text-[10px] uppercase tracking-[0.4em] text-white/60 font-medium flex items-center gap-8">
             {item} <span className="w-1.5 h-1.5 rounded-full bg-gold/80 shadow-[0_0_10px_rgba(196,162,101,0.5)] inline-block" />
@@ -112,18 +113,58 @@ export default function Hero() {
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end start"] });
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
   const textY = useTransform(scrollYProgress, [0, 0.5], [0, 100]);
+  const [iframeReady, setIframeReady] = useState(false);
+  const [heroVisible, setHeroVisible] = useState(true);
+
+  // Delay initial iframe mount until main thread is free
+  useEffect(() => {
+    const timer = setTimeout(() => setIframeReady(true), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Mount/unmount iframe based on hero visibility
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setHeroVisible(entry.isIntersecting),
+      { threshold: 0.05 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const showIframe = iframeReady && heroVisible;
 
   return (
-    <section id="hero" ref={containerRef} className="relative w-full min-h-screen overflow-hidden">
-      {/* ▸ Layer 0: Full-screen 360° Panorama Background */}
+    <section id="hero" ref={containerRef} className="relative w-full min-h-screen overflow-hidden bg-[#0e0f1a]">
+      {/* ▸ Layer 0: Fallback Pre-loader Image (Camouflages lag until 360 iframe loads) */}
       <div className="absolute inset-0 z-0">
-        <iframe
-          src={`${PANO_VIEWER_URL}?nowheel=1`}
-          className="absolute inset-0 w-full h-full border-0"
-          allowFullScreen
-          allow="gyroscope; accelerometer"
-          title="Pavilion Square KL — 360° Panorama"
+        <Image
+          src="/page_3_img_1.jpeg"
+          alt="Pavilion Square KL"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-60 mix-blend-screen scale-105"
         />
+        <div className="absolute inset-0 bg-[#0e0f1a]/40" />
+      </div>
+
+      {/* ▸ Layer 1: Full-screen 360° Panorama Background */}
+      <div className="absolute inset-0 z-0">
+        {showIframe && (
+          <motion.iframe
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5 }}
+            src={`${PANO_VIEWER_URL}?nowheel=1`}
+            className="absolute inset-0 w-full h-full border-0 pointer-events-none sm:pointer-events-auto"
+            allowFullScreen
+            allow="gyroscope; accelerometer"
+            title="Pavilion Square KL — 360° Panorama"
+          />
+        )}
 
         {/* Stronger Vignette for better text visibility */}
         <div className="absolute inset-0 pointer-events-none z-[2]"
@@ -151,26 +192,26 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="text-2xl sm:text-5xl md:text-6xl lg:text-[7vw] leading-none font-heading font-bold text-white tracking-tight mb-6 sm:mb-14 md:mb-20 drop-shadow-[0_4px_12px_rgba(0,0,0,1)]"
+            className="text-[8.5vw] sm:text-6xl md:text-7xl lg:text-[8vw] leading-[0.85] font-heading font-black text-white tracking-tighter mb-8 sm:mb-14 md:mb-20 drop-shadow-[0_4px_12px_rgba(0,0,0,1)] whitespace-nowrap"
           >
             <span className="drop-shadow-[0_0_30px_rgba(0,0,0,0.8)]">PAVILION</span>{" "}
-            <motion.span
-              className="inline-block gold-gradient-text relative"
-              animate={{
-                filter: [
-                  "drop-shadow(0 0 15px rgba(196,162,101,0.4))",
-                  "drop-shadow(0 0 50px rgba(196,162,101,0.8))",
-                  "drop-shadow(0 0 15px rgba(196,162,101,0.4))"
-                ]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            >
-              SQUARE
-            </motion.span>
+            <span className="inline-block relative">
+              {/* Opacity-based glow layer (hardware accelerated) */}
+              <motion.span
+                className="absolute inset-0 gold-gradient-text blur-[12px] z-0"
+                animate={{ opacity: [0.4, 0.9, 0.4] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                style={{ willChange: "opacity" }}
+                aria-hidden="true"
+              >
+                SQUARE
+              </motion.span>
+
+              {/* Static foreground text with a lightweight text-shadow */}
+              <span className="relative z-10 gold-gradient-text drop-shadow-[0_0_15px_rgba(196,162,101,0.5)]">
+                SQUARE
+              </span>
+            </span>
           </motion.h1>
 
           <motion.div

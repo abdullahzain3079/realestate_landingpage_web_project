@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import { useInView as useInViewRIO } from "react-intersection-observer";
 import {
   MapPin, Train, ShoppingBag, Building2, Landmark, Plane, Car,
@@ -72,11 +73,13 @@ function BgSlider({ current, slides }: { current: number; slides: { src: string;
           animate={{ opacity: i === current ? 1 : 0 }}
           transition={{ duration: 1.6, ease: "easeInOut" }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={s.src}
             alt={s.headline}
-            className="w-full h-full object-cover kb-zoom-bg"
+            fill
+            sizes="100vw"
+            priority={i === 0}
+            className="object-cover kb-zoom-bg"
           />
         </motion.div>
       ))}
